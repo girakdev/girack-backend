@@ -793,13 +793,10 @@ version = "0.1.0"
 dependencies = [
  "actix-rt",
  "actix-web",
- "bytes",
  "chrono",
  "clap",
- "encoding_rs",
  "env_logger",
  "htmlescape",
- "percent-encoding",
  "serde",
  "tokio",
  "tokio-postgres",
