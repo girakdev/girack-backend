@@ -11,7 +11,8 @@ pub async fn run() -> std::io::Result<()> {
 
         App::new()
             .wrap(middleware::Logger::default())
-            .service(get_hello_handler)
+            .service(get_message_handler)
+            .service(post_message_handler)
     })
     .bind(format!("0.0.0.0:{}", get_env("BACKEND_PORT")))?
     .run()
