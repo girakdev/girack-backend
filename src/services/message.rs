@@ -16,7 +16,15 @@ pub struct GetMessageRequest {
 #[derive(Serialize)]
 pub struct GetMessageResponse {
     ok: bool,
-    messages: Vec<Message>,
+    messages: Vec<MessageData>,
+}
+
+#[derive(Serialize)]
+struct MessageData {
+    id: i64,
+    user_id: i64,
+    timestamp: DateTime<Local>,
+    text: String,
 }
 
 #[get("/v1/message")]
@@ -30,7 +38,18 @@ pub async fn get_message_handler(request: web::Query<GetMessageRequest>) -> impl
     .await
     .unwrap();
 
-    HttpResponse::Ok().json(GetMessageResponse { ok: true, messages })
+    HttpResponse::Ok().json(GetMessageResponse {
+        ok: true,
+        messages: messages
+            .iter()
+            .map(|message| MessageData {
+                id: message.id,
+                user_id: message.user_id,
+                timestamp: message.timestamp,
+                text: message.text.clone(),
+            })
+            .collect(),
+    })
 }
 
 #[derive(Deserialize)]
