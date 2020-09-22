@@ -9,7 +9,7 @@ pub struct Message {
     pub id: i64,
     pub user_id: i64,
     pub channel: String,
-    pub timestamp: DateTime<FixedOffset>,
+    pub timestamp: DateTime<Local>,
     pub text: String,
     pub hidden: bool,
 }
@@ -19,7 +19,7 @@ pub const CREATE_MESSAGE_TABLE: &str = "
 CREATE TABLE message (
     id              BIGSERIAL PRIMARY KEY,
     user_id         BIGSERIAL NOT NULL,
-    channel         TEXT NOT NULL UNIQUE,
+    channel         TEXT NOT NULL,
     timestamp       TIMESTAMP WITH TIME ZONE NOT NULL,
     text            TEXT NOT NULL,
     hidden          BOOLEAN NOT NULL DEFAULT false
@@ -31,7 +31,7 @@ impl Message {
     pub async fn create(
         user_id: i64,
         channel: &str,
-        timestamp: DateTime<FixedOffset>,
+        timestamp: DateTime<Local>,
         text: &str,
     ) -> Result<Message, Error> {
         let (client, connection) = db::connect().await?;
@@ -49,7 +49,7 @@ impl Message {
                 channel,
                 timestamp,
                 text
-            ) VALUES ($1, $2, $3, $4) RETURNING id, hidden
+            ) VALUES ($1, $2, $3, $4) RETURNING id, timestamp, hidden
             ",
             )
             .await?;
@@ -58,7 +58,8 @@ impl Message {
             .query_one(&statement, &[&user_id, &channel, &timestamp, &text])
             .await?;
         let id: i64 = row.get(0);
-        let hidden: bool = row.get(1);
+        let timestamp: DateTime<Local> = row.get(1);
+        let hidden: bool = row.get(2);
 
         Ok(Message {
             id,
@@ -85,7 +86,7 @@ impl Message {
         let id: i64 = row.get(0);
         let user_id: i64 = row.get(1);
         let channel: String = row.get(2);
-        let timestamp: DateTime<FixedOffset> = row.get(3);
+        let timestamp: DateTime<Local> = row.get(3);
         let text: String = row.get(4);
         let hidden: bool = row.get(5);
 
@@ -103,8 +104,8 @@ impl Message {
     pub async fn find_many(
         channel: &str,
         count: Option<i64>,
-        latest_datetime: Option<DateTime<FixedOffset>>,
-        oldest_datetime: Option<DateTime<FixedOffset>>,
+        latest_datetime: Option<DateTime<Local>>,
+        oldest_datetime: Option<DateTime<Local>>,
     ) -> Result<Vec<Message>, Error> {
         let (client, connection) = db::connect().await?;
         tokio::spawn(async move {
@@ -120,20 +121,17 @@ impl Message {
 
         let oldest_datetime = match oldest_datetime {
             Some(oldest_datetime) => oldest_datetime,
-            None => Utc
-                .ymd(1970, 1, 1)
-                .and_hms(0, 0, 0)
-                .with_timezone(&Utc::now().timezone().fix()),
+            None => Local.ymd(1970, 1, 1).and_hms(0, 0, 0),
         };
 
         let latest_datetime = match latest_datetime {
             Some(latest_datetime) => latest_datetime,
-            None => Utc::now().with_timezone(&Utc::now().timezone().fix()),
+            None => Local::now(),
         };
 
         let rows = client
             .query(
-                "SELECT * FROM message WHERE channel_id = ($1) AND timestamp BETWEEN ($2) AND ($3) AND hidden = false LIMIT ($4)",
+                "SELECT * FROM message WHERE channel = ($1) AND timestamp BETWEEN ($2) AND ($3) AND hidden = false ORDER BY timestamp DESC LIMIT ($4)",
                 &[&channel, &oldest_datetime, &latest_datetime, &count],
             )
             .await?;
@@ -144,7 +142,7 @@ impl Message {
                 let id: i64 = row.get(0);
                 let user_id: i64 = row.get(1);
                 let channel: String = row.get(2);
-                let timestamp: DateTime<FixedOffset> = row.get(3);
+                let timestamp: DateTime<Local> = row.get(3);
                 let text: String = row.get(4);
                 let hidden: bool = row.get(5);
 
@@ -167,9 +165,7 @@ mod tests {
 
     #[tokio::test]
     async fn create_and_find() {
-        let timestamp = FixedOffset::east(9 * 3600)
-            .ymd(2014, 11, 28)
-            .and_hms_nano(21, 45, 59, 324310000);
+        let timestamp = Local::now();
 
         let message = Message::create(0, "general", timestamp, "こんにちは")
             .await

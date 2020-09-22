@@ -9,8 +9,8 @@ pub struct GetMessageRequest {
     // token: String,
     channel: String,
     count: Option<i64>,
-    latest_datetime: Option<DateTime<FixedOffset>>,
-    oldest_datetime: Option<DateTime<FixedOffset>>,
+    latest_datetime: Option<DateTime<Local>>,
+    oldest_datetime: Option<DateTime<Local>>,
 }
 
 #[derive(Serialize)]
@@ -49,7 +49,7 @@ pub async fn post_message_handler(request: web::Json<PostMessageRequest>) -> imp
     Message::create(
         0, // TODO: implement user
         &request.channel,
-        Utc::now().with_timezone(&Utc::now().timezone().fix()),
+        Local::now(),
         &request.text,
     )
     .await
