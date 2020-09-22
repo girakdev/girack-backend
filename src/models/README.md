@@ -2,6 +2,6 @@
 
 ## Message
 
-| id        | text |
-| --------- | ---- |
-| bigserial | text |
+| id        | user_id   | chennel | timestamp  | text | hidden |
+| --------- | --------- | ------- | ---------- | ---- | ------ |
+| bigserial | bigserial | text    | timestampz | text | bool   |
