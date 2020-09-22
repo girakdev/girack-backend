@@ -18,12 +18,12 @@
 
 - `latest_datetime`
 
-  - **Optional**
+  - _Optional_
   - _datetime_
 
 - `oldest_datetime`
 
-  - **Optional**
+  - _Optional_
   - _datetime_
 
 #### Response
@@ -34,7 +34,22 @@
 
 - `messages`
 
-  - `Message`
+  - `id`
+
+    - _int_
+
+  - `user_id`
+
+    - _int_
+
+  - `timestamp`
+
+    - _datetime_
+
+  - `text`
+
+    - _text_
+
   - _list_
 
 ### POST /v1/message
