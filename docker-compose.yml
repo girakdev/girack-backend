@@ -1,62 +1,23 @@
 version: '3'
+
 services:
-  postgres:
-    container_name: postgres
-    build: 
+  http-server:
+    build:
       context: .
-      dockerfile: ./docker/postgres/Dockerfile
-      args:
-        HTTP_PROXY:  $HTTP_PROXY
-        http_proxy:  $http_proxy
-        HTTPS_PROXY: $HTTPS_PROXY
-        https_proxy: $https_proxy
-        FTP_PROXY:   $FTP_PROXY
-        ftp_proxy:   $ftp_proxy
-        NO_PROXY:    $NO_PROXY
-        no_proxy:    $no_proxy
-
-    environment:
-      POSTGRES_USER:    app_user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB:       app_db
-      HTTP_PROXY:  $HTTP_PROXY
-      http_proxy:  $http_proxy
-      HTTPS_PROXY: $HTTPS_PROXY
-      https_proxy: $https_proxy
-      FTP_PROXY:   $FTP_PROXY
-      ftp_proxy:   $ftp_proxy
-      NO_PROXY:    $NO_PROXY
-      no_proxy:    $no_proxy
-
-  app:
-    container_name: app
+    ports:
+      - "8080:8080"
     depends_on:
       - postgres
-    build: 
-      context: .
-      dockerfile: ./docker/golang/Dockerfile
-      args:
-        HTTP_PROXY:  $HTTP_PROXY
-        http_proxy:  $http_proxy
-        HTTPS_PROXY: $HTTPS_PROXY
-        https_proxy: $https_proxy
-        FTP_PROXY:   $FTP_PROXY
-        ftp_proxy:   $ftp_proxy
-        NO_PROXY:    $NO_PROXY
-        no_proxy:    $no_proxy
-
-    environment:
-      HTTP_PROXY:  $HTTP_PROXY
-      http_proxy:  $http_proxy
-      HTTPS_PROXY: $HTTPS_PROXY
-      https_proxy: $https_proxy
-      FTP_PROXY:   $FTP_PROXY
-      ftp_proxy:   $ftp_proxy
-      NO_PROXY:    $NO_PROXY
-      no_proxy:    $no_proxy
-      GOPATH: /go
+    container_name: http-server
     volumes:
-      - ./go:/go/src/app/go/
+      - .:/go/src/app/
+    command:
+      sh -c "go run main.go"
 
-    command: go run main.go
-
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=password 
+      - POSTGRES_DB=girack
