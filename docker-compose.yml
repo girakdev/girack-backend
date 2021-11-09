@@ -2,13 +2,18 @@ version: '3'
 
 services:
   girack-server:
+    container_name: grack-server
     build:
       context: .
+
     ports:
       - "8080:8080"
     depends_on:
       - postgres
-    container_name: grack-server
+
+    environment:
+      - DATABASE_URL=postgres://root:password@postgres:5432/girack?sslmode=disable
+
     volumes:
       - ./app:/go/src/app
     command:
@@ -18,6 +23,8 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      - POSTGRES_USER=girak
-      - POSTGRES_PASSWORD=password 
-      - POSTGRES_DB=girack
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5555:5432
+    user: root

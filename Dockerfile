@@ -5,7 +5,6 @@ WORKDIR /go/src/app
 
 ENV GO111MODULE=on
 
-RUN go mod tidy
 RUN go mod download github.com/gin-gonic/gin
 
 EXPOSE 8080

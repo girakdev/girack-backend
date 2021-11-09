@@ -7,7 +7,7 @@ import (
 )
 
 const (
-  conf = "host=postgres port=5432 user=girak password=password dbname=girack sslmode=disable"
+  conf = "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable"
 )
 
 type SqlHandler struct {
