@@ -19,6 +19,8 @@ func NewSqlHandler() database.SqlHandler {
   if err != nil {
     panic(err.Error)
   }
+  defer conn.Close()
+
   sqlHandler := new(SqlHandler)
   sqlHandler.Conn = conn
 
