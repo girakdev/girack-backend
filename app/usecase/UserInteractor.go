@@ -1,26 +1,25 @@
 package usecase
 
 import (
-	"girack/app/domain"
+	"girack/domain"
 )
 
-type UserRepository interface {
-  Store(domain.User) (int, error)
-  FindById(int) (domain.User, error)
-  Users() (domain.Users, error)
-}
 
 type UserInteractor struct {
-  UseRepository UserRepository
+  UserRepository UserRepository
 }
 
-func (interactor *UserInteractor) Add(u domain.User) (err error) {
-  _, err = interactor.UseRepository.Store(u)
+func (interactor *UserInteractor) Add(u domain.User) (user domain.User, err error) {
+  identifier, err := interactor.UserRepository.Store(u)
+  if err != nil {
+    return
+  }
+  user, err = interactor.UserRepository.FindById(identifier)
   return
 }
 
 func (interactor *UserInteractor) UserById(identifier int) (user domain.User, err error) {
-  user, err = interactor.UseRepository.FindById(identifier)
+  user, err = interactor.UserRepository.FindById(identifier)
   return
 }
 

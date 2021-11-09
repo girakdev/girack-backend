@@ -1,22 +1,6 @@
 package database
 
-import "app/domain"
-
-type SqlHandler interface {
-  Execute(string, ...interface{}) (Result, error)
-  Query(string, ...interface{}) (Row, error)
-}
-
-type Result interface {
-  LastInsertId() (int64, error)
-  RowsAffected() (int64, error)
-}
-
-type Row interface {
-  Scan(...interface{}) error
-  Next() bool
-  Close() error
-}
+import "girack/domain"
 
 type UserRepository struct {
   SqlHandler
@@ -24,7 +8,7 @@ type UserRepository struct {
 
 func (repo *UserRepository) Store(u domain.User) (id int, err error){
   result, err := repo.Execute(
-    "INSERT INTO users (id_name, name) VALUES(?,?)", u.ID, u.Name,
+    "INSERT INTO users (ideal_name, real_name) VALUES(?,?)", u.IdealName, u.RealName,
   )
   if err != nil {
     return
@@ -58,7 +42,7 @@ func (repo *UserRepository) FindById(identifier int) (user domain.User, err erro
 
 
 func (repo *UserRepository) FindAll() (users domain.Users, err error) {
-  rows, err := repo.query("SELECT id, ideal_name, real_name FROM users")
+  rows, err := repo.Query("SELECT id, ideal_name, real_name FROM users")
   defer rows.Close()
   if err != nil {
     return

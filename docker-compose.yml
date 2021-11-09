@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  http-server:
+  girack-server:
     build:
       context: .
     ports:
       - "8080:8080"
     depends_on:
       - postgres
-    container_name: http-server
+    container_name: grack-server
     volumes:
-      - .:/go/src/app/
+      - ./app:/go/src/app
     command:
       sh -c "go run main.go"
 
@@ -18,6 +18,6 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      - POSTGRES_USER=test_user
+      - POSTGRES_USER=girak
       - POSTGRES_PASSWORD=password 
       - POSTGRES_DB=girack

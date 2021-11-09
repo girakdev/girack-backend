@@ -1,14 +1,11 @@
-FROM golang:1.15-alpine3.12
+FROM golang:1.16
 
-RUN apk update && \
-    apk upgrade && \
-    apk add git
-
-ENV CGO_ENABLED=0
-
+COPY ./app /go/src/app
 WORKDIR /go/src/app
-COPY go.mod go.sum main.go ./
 
-RUN go mod download
+ENV GO111MODULE=on
+
+RUN go mod tidy
+RUN go mod download github.com/gin-gonic/gin
 
 EXPOSE 8080

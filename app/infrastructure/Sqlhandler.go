@@ -3,7 +3,7 @@ package infrastructure
 import (
   "database/sql"
   _ "github.com/lib/pq"
-  "girack/app/interfaces/database"
+  "girack/interfaces/database"
 )
 
 const (

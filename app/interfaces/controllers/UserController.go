@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"app/domain"
-	"app/interfaces/database"
-	"app/usecase"
+	"girack/domain"
+	"girack/interfaces/database"
+	"girack/usecase"
 	"strconv"
 )
 
@@ -14,7 +14,7 @@ type UserController struct {
 func NewUserController(sqlHandler database.SqlHandler) *UserController {
   return &UserController{
     Interactor: usecase.UserInteractor{
-      UseRepository: &database.UserRepository {
+      UserRepository: &database.UserRepository {
         SqlHandler: sqlHandler,
       },
     },
@@ -24,19 +24,28 @@ func NewUserController(sqlHandler database.SqlHandler) *UserController {
 func (controller *UserController) Create(c Context) {
   u := domain.User{}
   c.Bind(&u)
-  err := controller.interactor.Add(u)
+  user, err := controller.Interactor.Add(u)
   if err != nil {
     c.JSON(500, NewError(err))
     return
   }
-  c.Json(201)
+  c.JSON(201, user)
 }
 
 func (controller *UserController) Show(c Context) {
   id, _ := strconv.Atoi(c.Param("id"))
-  user, err := controller.Interactor.UsreById(id)
+  user, err := controller.Interactor.UserById(id)
   if err != nil {
     c.JSON(500, NewError(err))
   }
   c.JSON(200, user)
+}
+
+func (controller *UserController) Index(c Context) {
+    users, err := controller.Interactor.Users()
+    if err != nil {
+        c.JSON(500, NewError(err))
+        return
+    }
+    c.JSON(200, users)
 }

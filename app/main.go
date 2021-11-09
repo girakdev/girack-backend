@@ -1,6 +1,6 @@
 package main
 
-import "app/infrastructure"
+import "girack/infrastructure"
 
 func main() {
   infrastructure.Router.Run()
