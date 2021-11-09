@@ -2,7 +2,8 @@ package domain
 
 type User struct{
   ID int
-  Name string
+  IdealName string
+  RealName string
 }
 
 type Users []User
