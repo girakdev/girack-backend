@@ -1,3 +1,4 @@
 girack-backend
 .env
 go.sum
+postgres/*.sql
