@@ -11,17 +11,17 @@ const (
   conf = "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable"
 )
 
-func CreateNewController() (co *Controller){
+func CreateNewController() (controller *Controller){
   conn, err := sql.Open("postgres", conf)
   if err != nil {
     panic(err.Error)
   }
   defer conn.Close()
 
-  co = new(Controller)
-  co.db = conn
+  controller = new(Controller)
+  controller.db = conn
 
-  return co
+  return controller
 }
 
 type Controller struct {
