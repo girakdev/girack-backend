@@ -3,24 +3,23 @@ version: '3'
 services:
   girack-server:
     container_name: grack-server
-    build:
+    build: 
       context: .
-
+      dockerfile: ./docker/app/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
       - postgres
-
     environment:
       - DATABASE_URL=postgres://root:password@postgres:5432/girack?sslmode=disable
-
     volumes:
       - ./app:/go/src/app
-    command:
-      sh -c "go run main.go"
 
   postgres:
-    image: postgres:latest
+    #restart: always テストでは使わない
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
     container_name: postgres
     environment:
       - POSTGRES_USER=root
@@ -31,3 +30,4 @@ services:
       - ./postgres:/docker-entrypoint-initdb.d/
       - /etc/localtime:/etc/localtime:ro
     user: root
+
