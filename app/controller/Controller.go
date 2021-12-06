@@ -29,13 +29,16 @@ type Controller struct {
 }
 
 func (conn *Controller) CreateUser(c *gin.Context) {
+  c.JSON( 200, gin.H{ "message": "CreateUser", })
   // shori
 }
 
 func (conn *Controller) Index(c *gin.Context){
+  c.JSON( 200, gin.H{ "message": "Index", })
   // shori
 }
 
 func (conn *Controller) Show(c *gin.Context){
+  c.JSON( 200, gin.H{ "message": "Show", })
   // shori
 }
