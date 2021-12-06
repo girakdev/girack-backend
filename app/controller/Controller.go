@@ -7,12 +7,13 @@ import (
   _ "github.com/lib/pq"
 )
 
-const (
-  conf = "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable"
-)
+
+type Controller struct {
+  db *sql.DB
+}
 
 func CreateNewController() (controller *Controller){
-  conn, err := sql.Open("postgres", conf)
+  conn, err := sql.Open("postgres", "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable")
   if err != nil {
     panic(err.Error)
   }
@@ -22,10 +23,6 @@ func CreateNewController() (controller *Controller){
   controller.db = conn
 
   return controller
-}
-
-type Controller struct {
-  db *sql.DB
 }
 
 func (conn *Controller) CreateUser(c *gin.Context) {
