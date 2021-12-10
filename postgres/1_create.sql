@@ -1,8 +1,7 @@
-CREATE TABLE IF NOT EXISTS user (
-  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE users (
+  id SERIAL NOT NULL,
   email VARCHAR(100) NOT NULL,
-  password VARCHAR(100) NOT NULL,
   name VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  PRIMARY KEY (id)
 )

@@ -1,3 +1,3 @@
-INSER INTO user (email, password, name) VALUES ('testuser1@test.com', 'passwordhash1', 'testuser1')
-INSER INTO user (email, password, name) VALUES ('testuser2@test.com', 'passwordhash2', 'testuser2')
-INSER INTO user (email, password, name) VALUES ('testuser3@test.com', 'passwordhash3', 'testuser3')
+INSERT INTO users (email, name) VALUES ('testuser1@test.com', 'testuser1');
+INSERT INTO users (email, name) VALUES ('testuser2@test.com', 'testuser2');
+INSERT INTO users (email, name) VALUES ('testuser3@test.com', 'testuser3');

@@ -1,30 +1,32 @@
 package db
 
 import (
-  "databaes/sql"
+  "database/sql"
   _ "github.com/lib/pq"
+  "log"
 )
 
-var (
-  db *sql.DB
-  err error
-)
+var db *sql.DB
+
+func logFatal(err error) {
+  if err != nil {
+    log.Fatal(err)
+  }
+}
 
 func Init() {
-  var conf = "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable"
-  db, err = sql.Open("postgres", conf)
-  if err != nil {
-    panic(err)
-  }
+  // security hole
+  conf := "host=girack_db user=root password=password dbname=postgres sslmode=disable"
 
+  db, err := sql.Open("postgres", conf)
+  logFatal(err)
+  defer db.Close()
+  err = db.Ping()
+  logFatal(err)
+
+  log.Println("database successfully configured")
 }
 
 func GetDB() *sql.DB {
   return db
-}
-
-func Close() {
-  if err := db.Close(); err != nil {
-    panic(err)
-  }
 }

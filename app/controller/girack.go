@@ -1,52 +1,62 @@
 package controller
 
 import (
-	"database/sql"
-  "net/http"
-	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
+	"fmt"
+	"net/http"
 
-  "app/db"
-  "app/entity"
+	"github.com/gin-gonic/gin"
+
+	"app/db"
+	"app/entity"
 )
 
-type GirackController interface {
-  DeleteUser()
-}
-type girackController struct {
-  Db *sql.DB
-}
+const (
+  queryGetUser    = "SELECT * FROM users WHERE id=$1"
+)
 
-func CreategirackController() (gc *girackController) {
-  var conf = "host=postgres port=5555 user=girak password=password dbname=girack sslmode=disable"
-
-  conn, err := sql.Open("postgres", conf)
-  defer conn.Close()
-
-  if err != nil {
-    panic(err)
-  }
-
-  gc = new(girackController)
-  gc.Db = conn
-
-  return
-}
-func (gc *girackController) DeleteUser(c *gin.Context){
-
+func DeleteUser(c *gin.Context){
   c.JSON(http.StatusOK, gin.H{ "message": "CreateUser", })
   //Todo
 }
-func (gc *girackController)CreateUser(c *gin.Context) {
-
+func CreateUser(c *gin.Context) {
   c.JSON(http.StatusOK, gin.H{ "message": "CreateUser", })
   // Todo
 }
-func (gc *girackController) Index(c *gin.Context){
+
+func GetUser(){
+  Db := db.GetDB()
+
+  rows, err := Db.Query("SELECT * FROM users")
+  checkErr(err)
+  defer rows.Close()
+
+  var user entity.User
+
+  for rows.Next() {
+    err := rows.Scan(&user.Email, &user.Name)
+    checkErr(err)
+    fmt.Printf("Email: %s, Name: %s\n", user.Email, user.Name)
+  }
+  err = rows.Err()
+  checkErr(err)
+
+  //err = stmt.QueryRow(1).Scan(&user.Email, &user.Name)
+  //checkErr(err)
+
+//  c.JSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name})
+}
+
+func Index(c *gin.Context){
   c.JSON(http.StatusOK, gin.H{ "message": "Index", })
   // Todo
 }
-func (gc *girackController) Show(c *gin.Context){
+func Show(c *gin.Context){
   c.JSON(http.StatusOK, gin.H{ "message": "Show", })
   // Todo
+}
+
+func checkErr(err error) {
+  if err != nil {
+    panic(err)
+  }
 }
