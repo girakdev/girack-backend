@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
+  "log"
 
 	"github.com/gin-gonic/gin"
 
@@ -11,7 +11,7 @@ import (
 )
 
 const (
-  queryGetUser    = "SELECT * FROM users WHERE id=$1"
+  queryGetUser    = "SELECT email, name FROM users WHERE id=$1"
 )
 
 func DeleteUser(c *gin.Context){
@@ -23,27 +23,18 @@ func CreateUser(c *gin.Context) {
   // Todo
 }
 
-func GetUser(){
+func GetUser(c *gin.Context){
   Db := db.GetDB()
+  user := entity.User{}
 
-  rows, err := Db.Query("SELECT * FROM users")
-  checkErr(err)
-  defer rows.Close()
+  stmt, err := Db.Prepare(queryGetUser)
+  defer stmt.Close()
+  logFatal(err)
 
-  var user entity.User
+  err = stmt.QueryRow(1).Scan(&user.Email, &user.Name)
+  logFatal(err)
 
-  for rows.Next() {
-    err := rows.Scan(&user.Email, &user.Name)
-    checkErr(err)
-    fmt.Printf("Email: %s, Name: %s\n", user.Email, user.Name)
-  }
-  err = rows.Err()
-  checkErr(err)
-
-  //err = stmt.QueryRow(1).Scan(&user.Email, &user.Name)
-  //checkErr(err)
-
-//  c.JSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name})
+  c.JSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name})
 }
 
 func Index(c *gin.Context){
@@ -54,9 +45,8 @@ func Show(c *gin.Context){
   c.JSON(http.StatusOK, gin.H{ "message": "Show", })
   // Todo
 }
-
-func checkErr(err error) {
+func logFatal(err error) {
   if err != nil {
-    panic(err)
+    log.Fatal(err)
   }
 }

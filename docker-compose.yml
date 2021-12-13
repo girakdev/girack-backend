@@ -34,15 +34,13 @@ services:
 
   postgres:
     container_name: girack_db
-    restart: always  
-    tty: true
     build:
       context: .
       dockerfile: ./docker/postgres/Dockerfile
     environment:
-      - POSTGRES_USER=root
+      - POSTGRES_USER=girack_user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DATABASE=girack_db
+      - POSTGRES_DB=girack_db
     volumes:
       - /etc/localtime:/etc/localtime:ro
     user: root
