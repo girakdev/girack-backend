@@ -12,6 +12,8 @@ import (
 
 const (
   queryGetUser    = "SELECT email, name FROM users WHERE id=$1"
+  queryInsertUser = "INSERT INTO users(email, name) VALUES($1, $2)"
+  queryUpdateUser = "UPDATE users SET email=$1, name=$2"
 )
 
 func DeleteUser(c *gin.Context){
@@ -24,14 +26,14 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context){
-  Db := db.GetDB()
+  db := db.Db
   user := entity.User{}
 
-  stmt, err := Db.Prepare(queryGetUser)
+  stmt, err := db.Prepare(queryGetUser)
   defer stmt.Close()
   logFatal(err)
 
-  err = stmt.QueryRow(1).Scan(&user.Email, &user.Name)
+  err = stmt.QueryRow(3).Scan(&user.Email, &user.Name)
   logFatal(err)
 
   c.JSON(http.StatusOK, gin.H{"email": user.Email, "name": user.Name})

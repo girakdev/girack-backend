@@ -9,7 +9,6 @@ func main() {
   db.InitDB()
   router := gin.Default()
 
-
   girackRouter := router.Group("/girack")
   {
     v1 := girackRouter.Group("/v1")
@@ -21,4 +20,5 @@ func main() {
   }
 
   router.Run()
+  db.CloseDB()
 }
