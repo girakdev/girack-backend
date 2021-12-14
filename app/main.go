@@ -14,7 +14,7 @@ func main() {
     v1 := girackRouter.Group("/v1")
     {
       v1.POST("/users", controller.CreateUser)
-      v1.GET("/users", controller.DeleteUser)
+      v1.POST("/users/:id", controller.UpdateUser)
       v1.GET("/users/:id", controller.GetUser)
     }
   }
