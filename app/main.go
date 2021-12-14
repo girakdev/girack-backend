@@ -21,6 +21,14 @@ func main() {
         users.GET("", controller.GetAllUser)
         users.DELETE(":id", controller.DeleteUser)
       }
+      channels := v1.Group("/channels")
+      {
+        channels.POST("", controller.CreateUser)
+        channels.POST("", controller.CreateUser)
+        channels.GET("", controller.CreateUser)
+        channels.GET("", controller.CreateUser)
+        channels.DELETE("", controller.DeleteUser)
+      }
     }
   }
 
