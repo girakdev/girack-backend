@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  girack-server:
+    container_name: grack-server
+    build: 
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+      args:
+        - HTTP_PROXY=$HTTP_PROXY
+        - http_proxy=$http_proxy
+        - HTTPS_PROXY=$HTTPS_PROXY
+        - https_proxy=$https_proxy
+        - FTP_PROXY=$FTP_PROXY
+        - ftp_proxy=$ftp_proxy
+        - NO_PROXY=$NO_PROXY
+        - no_proxy=$no_proxy
+    depends_on:
+      - postgres
+    environment:
+      - HTTP_PROXY=$HTTP_PROXY
+      - http_proxy=$http_proxy
+      - HTTPS_PROXY=$HTTPS_PROXY
+      - https_proxy=$https_proxy
+      - FTP_PROXY=$FTP_PROXY
+      - ftp_proxy=$ftp_proxy
+      - NO_PROXY=$NO_PROXY
+      - no_proxy=$no_proxy
+    volumes:
+      - ./app:/go/src/app
+    ports:
+      - "8080:8080"
+    command: /bin/sh -c "go run main.go"
+
+  postgres:
+    container_name: girack_db
+    build:
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    environment:
+      - POSTGRES_USER=girack_user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=girack_db
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    user: root
+
