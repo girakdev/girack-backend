@@ -34,7 +34,6 @@ func logFatal(err error) {
 
 func InitDB() {
   conf := fmt.Sprintf(schema, host, userName, password, dbName)
-  conf = "host=localhost password=password dbname=girack_db user=girack_user sslmode=disable port=5432"
 
   Db, err = sql.Open("postgres", conf)
   logFatal(err)
