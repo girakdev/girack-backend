@@ -104,7 +104,6 @@ func GetUser(c *gin.Context){
   user := entity.User{}
   err = stmt.QueryRow(idInt).Scan(&user.Email, &user.Name)
 
-  // error handling
   switch {
   case err == sql.ErrNoRows:
     c.JSON(http.StatusNotFound, gin.H{"message": "id " + id + " is not found"})
