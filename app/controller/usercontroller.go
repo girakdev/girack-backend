@@ -46,7 +46,7 @@ func DeleteUser(c *gin.Context) {
   case err != nil:
     panic(err)
   default:
-    c.JSON(http.StatusOK, gin.H{ "message": id + " has been deleted",})
+    c.JSON(http.StatusNoContent, gin.H{ "message": id + " has been deleted",})
   }
 }
 
@@ -88,7 +88,7 @@ func CreateUser(c *gin.Context) {
   logFatal(err)
 
   message := "Create " + user.Name
-  c.JSON(http.StatusOK, gin.H{ "message": message, })
+  c.JSON(http.StatusCreated, gin.H{ "message": message, })
 }
 
 func GetUser(c *gin.Context){
@@ -107,7 +107,7 @@ func GetUser(c *gin.Context){
   // error handling
   switch {
   case err == sql.ErrNoRows:
-    c.JSON(http.StatusBadRequest, gin.H{"message": "id " + id + "is not found"})
+    c.JSON(http.StatusNotFound, gin.H{"message": "id " + id + " is not found"})
   case err != nil:
     log.Fatal(err)
   default:
@@ -125,7 +125,7 @@ func GetAllUser(c *gin.Context) {
   rows, err := stmt.Query()
   switch {
   case err == sql.ErrNoRows:
-    c.JSON(http.StatusBadRequest, gin.H{"message": "we have no users ;;",})
+    c.JSON(http.StatusNotFound, gin.H{"message": "we have no users ;;",})
   case err != nil:
     log.Fatal(err)
   }
@@ -138,5 +138,6 @@ func GetAllUser(c *gin.Context) {
 
     users = append(users, user)
   }
+
   c.JSON(http.StatusOK, users)
 }
