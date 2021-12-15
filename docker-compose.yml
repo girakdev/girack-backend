@@ -24,10 +24,14 @@ services:
       - ftp_proxy=$ftp_proxy
       - NO_PROXY=$NO_PROXY
       - no_proxy=$no_proxy
+
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - 8080:8080
 
   postgres:
     container_name: girack_db
@@ -35,10 +39,11 @@ services:
       context: .
       dockerfile: ./docker/postgres/Dockerfile
     environment:
-      - POSTGRES_USER=girack_user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=girack_db
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    user: root
+    ports:
+      - 5432:5432
 
