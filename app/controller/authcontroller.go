@@ -1,32 +1,57 @@
 package controller
 
 import (
+  "log"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"github.com/gin-contrib/sessions"
 	"golang.org/x/crypto/bcrypt"
-  "strings"
 
 	"app/db"
+  "app/entity"
 )
 
-func Login(c *gin.Context) {
-  session := sessions.Default(c)
-  email := c.PostForm("email")
-  password := c.PostForm("password")
-  if strings.Trim(email, " ") == "" || strings.Trim(password, " ") == "" {
-    c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
+func Register(c *gin.Context) {
+  db := db.Db
+  user := entity.User{}
+  password := c.Param("password")
+  log.Println(password)
+  query := "INSERT INTO users (email, name, password) VALUES($1, $2, $3)"
+
+  c.BindJSON(&user)
+
+  stmt, err := db.Prepare(query)
+  logFatal(err)
+  defer stmt.Close()
+  hashpassword, err := passwordHash(password)
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"message": "inviled password format"})
     return
   }
 
+  _, err = stmt.Exec(user.Name, user.Email, hashpassword)
+  logFatal(err)
+
+  message := "Create " + user.Name
+  c.JSON(http.StatusCreated, gin.H{"message": message})
+}
+
+func Login(c *gin.Context) {
+  session := sessions.Default(c)
+  email := c.Param("email")
+  password := c.Param("password")
+  log.Println(email, password)
+
   hashpassword, _ := passwordHash(password)
   dbpassword, err := GetPasswordByEmail(email)
-  if err != sql.ErrNoRows {
-    c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
+  if err == sql.ErrNoRows {
+    c.JSON(http.StatusUnauthorized, gin.H{"error1": "incorrect Email or Password"})
+    log.Println(err)
     return
   } else if err != nil {
+    log.Println(err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "EEEEEEEEEEEEEEEERROR"})
     return
   }
@@ -50,6 +75,7 @@ func Logout(c *gin.Context) {
   user := session.Get("user")
   if user == nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session toekn"})
+    return
   }
   session.Clear()
   if err := session.Save(); err != nil {
@@ -86,4 +112,3 @@ func GetPasswordByEmail(email string) (password string, err error) {
   }
   return
 }
-

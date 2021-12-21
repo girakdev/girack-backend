@@ -20,7 +20,7 @@ func CreateRouter() *gin.Engine {
   {
     v1 := girackRouter.Group("/v1")
     {
-      v1.POST("/register", controller.CreateUser)
+      v1.POST("/register", controller.Register)
       v1.POST("/login", controller.Login)
       v1.GET("/logout", controller.Logout)
 
