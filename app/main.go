@@ -7,6 +7,6 @@ import (
 
 func main() {
   db.InitDB()
+  defer db.CloseDB()
   router.CreateRouter().Run()
-  db.CloseDB()
 }

@@ -33,6 +33,7 @@ func CreateRouter() *gin.Engine {
           users.GET(":id", controller.GetUser)
           users.GET("", controller.GetAllUser)
           users.DELETE(":id", controller.DeleteUser)
+    //    users.POST(":id", controller.SendMessage)
         }
  /*     channels := authUserGroup.Group("/channels")
         {
@@ -41,6 +42,8 @@ func CreateRouter() *gin.Engine {
           channels.GET("", controller.GetChannel)
           channels.GET("", controller.GetAllChannell)
           channels.DELETE("", controller.DeleteChannel)
+
+          channels.POST(":id", controller.CreatChannel)
         }
         message := authUserGroup.Group("/messages")
         {
