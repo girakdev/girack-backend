@@ -23,27 +23,25 @@ var (
   dbName   = os.Getenv("POSTGRES_DB")
 )
 
-const (
-  queryGetUser    = "SELECT email, name FROM users WHERE id=$1"
-)
-func logFatal(err error) {
-  if err != nil {
-    log.Fatal(err)
-  }
-}
-
 func InitDB() {
   conf := fmt.Sprintf(schema, host, userName, password, dbName)
 
   Db, err = sql.Open("postgres", conf)
-  logFatal(err)
+  if err != nil {
+    log.Fatal(err)
+  }
   err = Db.Ping()
-  logFatal(err)
+
+  if err != nil {
+    log.Fatal(err)
+  }
 
   log.Println("database successfully configured")
 }
 
 func CloseDB() {
   err = Db.Close()
-  logFatal(err)
+  if err != nil {
+    log.Fatal(err)
+  }
 }
