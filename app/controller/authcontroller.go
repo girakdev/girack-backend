@@ -1,41 +1,47 @@
 package controller
 
 import (
-//	"net/http"
- // "log"
-
+	"net/http"
 	"github.com/gin-gonic/gin"
- // "database/sql"
-  _ "github.com/lib/pq"
-  //"strconv"
-  "golang.org/x/crypto/bcrypt"
-  "github.com/gin-contrib/sessions"
+	"database/sql"
+	_ "github.com/lib/pq"
+	"github.com/gin-contrib/sessions"
+	"golang.org/x/crypto/bcrypt"
+  "strings"
 
-//	"app/db"
-//	"app/entity"
+	"app/db"
 )
 
-type authUser struct {
-  Email string `json:"email"`
-  Name string `json:"name"`
-  Password string `json:"password"`
-}
-
 func Login(c *gin.Context) {
- // user := authUser{}
-
-  //TODO ログイン処理を書く
   session := sessions.Default(c)
-  //session.Set("UserID", userid)
-  session.Save()
-}
+  email := c.PostForm("email")
+  password := c.PostForm("password")
 
-func Register(c *gin.Context) {
-  //email, _ := c.GetPostForm("id")
-  //password, _ := c.GetPostForm("password")
+  if strings.Trim(email, " ") == "" || strings.Trim(password, " ") == "" {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
+    return
+  }
+  hashpassword, _ := passwordHash(password)
+  dbpassword, err := GetPasswordByEmail(email)
+  if err != sql.ErrNoRows {
+    c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
+    return
+  } else if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "EEEEEEEEEEEEEEEERROR"})
+    return
+  }
 
-  //TODO 登録処理を格
-
+  err = passwordVerify(hashpassword, dbpassword)
+  if err != nil {
+    c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
+    return
+  }
+  session.Set("user", email)
+  if err = session.Save(); err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"errror": "Failed to save session"})
+    return
+  }
+  c.JSON(http.StatusOK, gin.H{"message": "Successfully authenticated user"})
 }
 
 func Logout(c *gin.Context) {
@@ -55,5 +61,20 @@ func passwordHash(pw string) (string, error) {
 
 func passwordVerify(hash, pw string) error {
   return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+}
+
+func GetPasswordByEmail(email string) (password string, err error) {
+  db := db.Db
+  query := "SELECT password FROM users WHERE email = $1"
+
+  stmt, err := db.Prepare(query)
+  if err != nil {
+    return "", err
+  }
+  err = stmt.QueryRow(email).Scan(&password)
+  if err != nil {
+    return "", err
+  }
+  return
 }
 
