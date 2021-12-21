@@ -99,7 +99,7 @@ func GetUser(c *gin.Context){
 func GetAllUser(c *gin.Context) {
   db := db.Db
 
-  stmt, err := db.Prepare("SELECT email, name FROM users")
+  stmt, err := db.Prepare("SELECT email, name, id FROM users")
   defer stmt.Close()
 
   rows, err := stmt.Query()
@@ -114,7 +114,7 @@ func GetAllUser(c *gin.Context) {
   users := []entity.User{}
   for rows.Next() {
     user := entity.User{}
-    err = rows.Scan(&user.Email, &user.Name)
+    err = rows.Scan(&user.Email, &user.Name, &user.Id)
     if err != nil {
       c.JSON(http.StatusInternalServerError, gin.H{"error": err})
       return

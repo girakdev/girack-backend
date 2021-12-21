@@ -35,7 +35,7 @@ func CreateRouter() *gin.Engine {
           users.DELETE(":id", controller.DeleteUser)
     //    users.POST(":id", controller.SendMessage)
         }
- /*     channels := authUserGroup.Group("/channels")
+        /*     channels := authUserGroup.Group("/:channelID")
         {
           channels.POST("", controller.CreatChannel)
           channels.PUT("", controller.UpdateChannel)
@@ -61,7 +61,7 @@ func CreateRouter() *gin.Engine {
 
 func AuthRequired(c *gin.Context) {
   session := sessions.Default(c)
-  user := session.Get("user")
+  user := session.Get("userid")
   if user == nil {
     c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
     return
