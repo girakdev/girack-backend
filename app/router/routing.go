@@ -34,7 +34,7 @@ func CreateRouter() *gin.Engine {
           users.GET("", controller.GetAllUser)
           users.DELETE(":id", controller.DeleteUser)
         }
-   /*     channels := v1.Group("/channels")
+ /*     channels := authUserGroup.Group("/channels")
         {
           channels.POST("", controller.CreatChannel)
           channels.POST("", controller.UpdateChannel)
