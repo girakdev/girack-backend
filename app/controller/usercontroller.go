@@ -13,16 +13,6 @@ import (
 	"app/entity"
 )
 
-const (
-  queryGetUser    = "SELECT email, name FROM users WHERE id=$1"
-  queryGetAllUser = "SELECT email, name FROM users"
-  queryInsertUser = "INSERT INTO users (email, name) VALUES($1, $2)"
-  queryUpdateUser = "UPDATE users SET email=$1, name=$2 WHERE id=$3"
-  queryDeleteUser = "DELETE FROM users WHERE id = $1"
-)
-
-var err error
-
 func logFatal(err error) {
   if err != nil {
     log.Fatal(err)
@@ -33,11 +23,12 @@ func logFatal(err error) {
 func DeleteUser(c *gin.Context) {
   db := db.Db
   id := c.Param("id")
+  query := "DELETE FROM users WHERE id = $1"
 
   idInt, err := strconv.Atoi(id)
   logFatal(err)
 
-  stmt, err := db.Prepare(queryDeleteUser)
+  stmt, err := db.Prepare(query)
   logFatal(err)
   defer stmt.Close()
 
@@ -53,13 +44,14 @@ func DeleteUser(c *gin.Context) {
 func UpdateUser(c *gin.Context) {
   db := db.Db
   user := entity.User{}
+  query := "UPDATE users SET email=$1, name=$2 WHERE id=$3"
 
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
   logFatal(err)
 
   c.BindJSON(&user)
-  stmt, err := db.Prepare(queryUpdateUser)
+  stmt, err := db.Prepare(query)
   logFatal(err)
   defer stmt.Close()
 
@@ -77,10 +69,11 @@ func UpdateUser(c *gin.Context) {
 func CreateUser(c *gin.Context) {
   db := db.Db
   user := entity.User{}
+  query := "INSERT INTO users (email, name) VALUES($1, $2)"
 
   c.BindJSON(&user)
 
-  stmt, err := db.Prepare(queryInsertUser)
+  stmt, err := db.Prepare(query)
   logFatal(err)
   defer stmt.Close()
 
@@ -93,11 +86,13 @@ func CreateUser(c *gin.Context) {
 
 func GetUser(c *gin.Context){
   db := db.Db
+  query := "SELECT email, name FROM users WHERE id=$1"
+
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
   logFatal(err)
 
-  stmt, err := db.Prepare(queryGetUser)
+  stmt, err := db.Prepare(query)
   defer stmt.Close()
   logFatal(err)
 
@@ -116,8 +111,9 @@ func GetUser(c *gin.Context){
 
 func GetAllUser(c *gin.Context) {
   db := db.Db
+  query := "SELECT email, name FROM users"
 
-  stmt, err := db.Prepare(queryGetAllUser)
+  stmt, err := db.Prepare(query)
   logFatal(err)
   defer stmt.Close()
 
