@@ -1,7 +1,6 @@
 package controller
 
 import (
-  "log"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"database/sql"
@@ -10,21 +9,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"app/db"
+  "app/entity"
 )
-
-type AuthUser struct {
-  Email string `json:"email"`
-  Name string `json:"name"`
-  Password string `json:"password"`
-}
 
 func Register(c *gin.Context) {
   db := db.Db
-  user := AuthUser{}
-  query := "INSERT INTO users (email, name, password) VALUES($1, $2, $3)"
+  user := entity.User{}
   c.BindJSON(&user)
 
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("INSERT INTO users (email, name, password) VALUES($1, $2, $3)")
   if err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": ""})
     return
@@ -47,28 +40,25 @@ func Register(c *gin.Context) {
 
 func Login(c *gin.Context) {
   session := sessions.Default(c)
-  user := AuthUser{}
+  user := entity.User{}
   c.BindJSON(&user)
 
-  dbpassword, err := GetPasswordByEmail(user.Email)
+  dbuser, err := GetUserByEmail(user.Email)
   if err == sql.ErrNoRows {
     c.JSON(http.StatusUnauthorized, gin.H{"error1": "incorrect Email or Password"})
-    log.Println(err)
     return
   } else if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": "ServerError"})
-    log.Println(err)
     return
   }
 
-  err = bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(user.Password))
+  err = bcrypt.CompareHashAndPassword([]byte(dbuser.Password), []byte(user.Password))
   if err != nil {
     c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
-    log.Println(err)
     return
   }
 
-  session.Set("user", user.Email)
+  session.Set("userid", user.Id)
   if err = session.Save(); err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"errror": "Failed to save session"})
     return
@@ -78,12 +68,12 @@ func Login(c *gin.Context) {
 
 func Logout(c *gin.Context) {
   session := sessions.Default(c)
-  user := session.Get("user")
+  user := session.Get("userid")
   if user == nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session toekn"})
     return
   }
-  session.Delete("user")
+  session.Delete("userid")
   err := session.Save()
   if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
@@ -101,17 +91,13 @@ func passwordHash(pw string) (string, error) {
   return string(hash), err
 }
 
-func GetPasswordByEmail(email string) (password string, err error) {
+func GetUserByEmail(email string) (user entity.User, err error) {
   db := db.Db
-  query := "SELECT password FROM users WHERE email = $1"
 
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("SELECT id, email, password, name FROM users WHERE email = $1")
   if err != nil {
-    return "", err
+    return
   }
-  err = stmt.QueryRow(email).Scan(&password)
-  if err != nil {
-    return "", err
-  }
+  err = stmt.QueryRow(email).Scan(&user.Id, &user.Email, &user.Password, &user.Name)
   return
 }

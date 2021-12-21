@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+//  "github.com/gin-contrib/sessions"
   "database/sql"
   _ "github.com/lib/pq"
   "strconv"
@@ -15,7 +16,6 @@ import (
 func DeleteUser(c *gin.Context) {
   db := db.Db
   id := c.Param("id")
-  query := "DELETE FROM users WHERE id = $1"
 
   idInt, err := strconv.Atoi(id)
   if err != nil {
@@ -23,7 +23,7 @@ func DeleteUser(c *gin.Context) {
     return
   }
 
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("DELETE FROM users WHERE id = $1")
   defer stmt.Close()
   if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to make Statement"})
@@ -41,7 +41,6 @@ func DeleteUser(c *gin.Context) {
 func UpdateUser(c *gin.Context) {
   db := db.Db
   user := entity.User{}
-  query := "UPDATE users SET email=$1, name=$2 WHERE id=$3"
 
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
@@ -51,7 +50,7 @@ func UpdateUser(c *gin.Context) {
   }
 
   c.BindJSON(&user)
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("UPDATE users SET email=$1, name=$2 WHERE id=$3")
   defer stmt.Close()
   if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -69,7 +68,6 @@ func UpdateUser(c *gin.Context) {
 
 func GetUser(c *gin.Context){
   db := db.Db
-  query := "SELECT email, name FROM users WHERE id=$1"
 
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
@@ -78,8 +76,7 @@ func GetUser(c *gin.Context){
     return
   }
 
-
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("SELECT email, name FROM users WHERE id=$1")
   defer stmt.Close()
   if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -101,9 +98,8 @@ func GetUser(c *gin.Context){
 
 func GetAllUser(c *gin.Context) {
   db := db.Db
-  query := "SELECT email, name FROM users"
 
-  stmt, err := db.Prepare(query)
+  stmt, err := db.Prepare("SELECT email, name FROM users")
   defer stmt.Close()
 
   rows, err := stmt.Query()
