@@ -25,7 +25,10 @@ func Register(c *gin.Context) {
   c.BindJSON(&user)
 
   stmt, err := db.Prepare(query)
-  logFatal(err)
+  if err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": ""})
+    return
+  }
   defer stmt.Close()
   user.Password, err = passwordHash(user.Password)
   if err != nil {
@@ -34,10 +37,12 @@ func Register(c *gin.Context) {
   }
 
   _, err = stmt.Exec(user.Email, user.Name, user.Password)
-  logFatal(err)
-
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"message": "inviled password format"})
+    return
+  }
   message := "Create " + user.Name
-  c.JSON(http.StatusCreated, gin.H{"message": message})
+  c.JSON(http.StatusOK, gin.H{"message": message})
 }
 
 func Login(c *gin.Context) {

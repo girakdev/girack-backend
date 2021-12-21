@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-  "log"
 
 	"github.com/gin-gonic/gin"
   "database/sql"
@@ -13,32 +12,30 @@ import (
 	"app/entity"
 )
 
-func logFatal(err error) {
-  if err != nil {
-    log.Fatal(err)
-  }
-}
-
-
 func DeleteUser(c *gin.Context) {
   db := db.Db
   id := c.Param("id")
   query := "DELETE FROM users WHERE id = $1"
 
   idInt, err := strconv.Atoi(id)
-  logFatal(err)
+  if err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Parameter must be integer"})
+    return
+  }
 
   stmt, err := db.Prepare(query)
-  logFatal(err)
   defer stmt.Close()
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to make Statement"})
+    return
+  }
 
   _, err = stmt.Exec(idInt)
-  switch {
-  case err != nil:
-    panic(err)
-  default:
-    c.JSON(http.StatusNoContent, gin.H{ "message": id + " has been deleted",})
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
   }
+  c.JSON(http.StatusOK, gin.H{ "message": id + " has been deleted",})
 }
 
 func UpdateUser(c *gin.Context) {
@@ -48,40 +45,26 @@ func UpdateUser(c *gin.Context) {
 
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
-  logFatal(err)
+  if err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Parameter must be STRING"})
+    return
+  }
 
   c.BindJSON(&user)
   stmt, err := db.Prepare(query)
-  logFatal(err)
   defer stmt.Close()
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
+  }
 
   _, err = stmt.Exec(user.Email, user.Name, idInt)
 
-  switch {
-  case err != nil:
-    log.Fatal(err)
-  default:
-    c.JSON(http.StatusOK, gin.H{ "message": id + " has been updated", })
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
   }
-}
-
-
-func CreateUser(c *gin.Context) {
-  db := db.Db
-  user := entity.User{}
-  query := "INSERT INTO users (email, name) VALUES($1, $2)"
-
-  c.BindJSON(&user)
-
-  stmt, err := db.Prepare(query)
-  logFatal(err)
-  defer stmt.Close()
-
-  _, err = stmt.Exec(user.Name, user.Email)
-  logFatal(err)
-
-  message := "Create " + user.Name
-  c.JSON(http.StatusCreated, gin.H{ "message": message, })
+  c.JSON(http.StatusOK, gin.H{ "message": id + " has been updated"})
 }
 
 func GetUser(c *gin.Context){
@@ -90,23 +73,30 @@ func GetUser(c *gin.Context){
 
   id := c.Param("id")
   idInt, err := strconv.Atoi(id)
-  logFatal(err)
+  if err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Parameter must be STRING"})
+    return
+  }
+
 
   stmt, err := db.Prepare(query)
   defer stmt.Close()
-  logFatal(err)
+  if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
+  }
 
   user := entity.User{}
   err = stmt.QueryRow(idInt).Scan(&user.Email, &user.Name)
 
-  switch {
-  case err == sql.ErrNoRows:
-    c.JSON(http.StatusNotFound, gin.H{"message": "id " + id + " is not found"})
-  case err != nil:
-    log.Fatal(err)
-  default:
-    c.JSON(http.StatusOK, user)
+  if err == sql.ErrNoRows {
+    c.JSON(http.StatusNotFound, gin.H{"error": "id " + id + " is not found"})
+    return
+  } else if err != nil{
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
   }
+  c.JSON(http.StatusOK, user)
 }
 
 func GetAllUser(c *gin.Context) {
@@ -114,22 +104,25 @@ func GetAllUser(c *gin.Context) {
   query := "SELECT email, name FROM users"
 
   stmt, err := db.Prepare(query)
-  logFatal(err)
   defer stmt.Close()
 
   rows, err := stmt.Query()
-  switch {
-  case err == sql.ErrNoRows:
-    c.JSON(http.StatusNotFound, gin.H{"message": "we have no users ;;",})
-  case err != nil:
-    log.Fatal(err)
+  if err == sql.ErrNoRows {
+    c.JSON(http.StatusNotFound, gin.H{"error": "we have no users ;;",})
+    return
+  } else if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+    return
   }
 
   users := []entity.User{}
   for rows.Next() {
     user := entity.User{}
     err = rows.Scan(&user.Email, &user.Name)
-    logFatal(err)
+    if err != nil {
+      c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+      return
+    }
 
     users = append(users, user)
   }
