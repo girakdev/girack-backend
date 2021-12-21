@@ -1,6 +1,6 @@
 CREATE TABLE users (
   id SERIAL NOT NULL,
-  email TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
   name VARCHAR(80) NOT NULL,
   displayed_name VARCHAR(80),
   password TEXT NOT NULL,

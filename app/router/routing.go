@@ -57,7 +57,6 @@ func AuthRequired(c *gin.Context) {
     c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
     return
   }
-
   c.Next()
 }
 

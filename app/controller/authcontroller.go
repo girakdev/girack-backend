@@ -16,11 +16,11 @@ func Login(c *gin.Context) {
   session := sessions.Default(c)
   email := c.PostForm("email")
   password := c.PostForm("password")
-
   if strings.Trim(email, " ") == "" || strings.Trim(password, " ") == "" {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
     return
   }
+
   hashpassword, _ := passwordHash(password)
   dbpassword, err := GetPasswordByEmail(email)
   if err != sql.ErrNoRows {
@@ -36,6 +36,7 @@ func Login(c *gin.Context) {
     c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
     return
   }
+
   session.Set("user", email)
   if err = session.Save(); err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"errror": "Failed to save session"})
@@ -46,8 +47,16 @@ func Login(c *gin.Context) {
 
 func Logout(c *gin.Context) {
   session := sessions.Default(c)
+  user := session.Get("user")
+  if user == nil {
+    c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session toekn"})
+  }
   session.Clear()
-  session.Save()
+  if err := session.Save(); err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
+    return
+  }
+  c.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
 }
 
 
