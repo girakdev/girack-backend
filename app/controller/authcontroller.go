@@ -10,28 +10,30 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"app/db"
-  "app/entity"
 )
+
+type AuthUser struct {
+  Email string `json:"email"`
+  Name string `json:"name"`
+  Password string `json:"password"`
+}
 
 func Register(c *gin.Context) {
   db := db.Db
-  user := entity.User{}
-  password := c.Param("password")
-  log.Println(password)
+  user := AuthUser{}
   query := "INSERT INTO users (email, name, password) VALUES($1, $2, $3)"
-
   c.BindJSON(&user)
 
   stmt, err := db.Prepare(query)
   logFatal(err)
   defer stmt.Close()
-  hashpassword, err := passwordHash(password)
+  user.Password, err = passwordHash(user.Password)
   if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"message": "inviled password format"})
     return
   }
 
-  _, err = stmt.Exec(user.Name, user.Email, hashpassword)
+  _, err = stmt.Exec(user.Email, user.Name, user.Password)
   logFatal(err)
 
   message := "Create " + user.Name
@@ -40,29 +42,28 @@ func Register(c *gin.Context) {
 
 func Login(c *gin.Context) {
   session := sessions.Default(c)
-  email := c.Param("email")
-  password := c.Param("password")
-  log.Println(email, password)
+  user := AuthUser{}
+  c.BindJSON(&user)
 
-  hashpassword, _ := passwordHash(password)
-  dbpassword, err := GetPasswordByEmail(email)
+  dbpassword, err := GetPasswordByEmail(user.Email)
   if err == sql.ErrNoRows {
     c.JSON(http.StatusUnauthorized, gin.H{"error1": "incorrect Email or Password"})
     log.Println(err)
     return
   } else if err != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "ServerError"})
     log.Println(err)
-    c.JSON(http.StatusInternalServerError, gin.H{"error": "EEEEEEEEEEEEEEEERROR"})
     return
   }
 
-  err = passwordVerify(hashpassword, dbpassword)
+  err = bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(user.Password))
   if err != nil {
     c.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect Email or Password"})
+    log.Println(err)
     return
   }
 
-  session.Set("user", email)
+  session.Set("user", user.Email)
   if err = session.Save(); err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"errror": "Failed to save session"})
     return
@@ -77,8 +78,9 @@ func Logout(c *gin.Context) {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session toekn"})
     return
   }
-  session.Clear()
-  if err := session.Save(); err != nil {
+  session.Delete("user")
+  err := session.Save()
+  if err != nil {
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save session"})
     return
   }
@@ -92,10 +94,6 @@ func passwordHash(pw string) (string, error) {
     return "", err
   }
   return string(hash), err
-}
-
-func passwordVerify(hash, pw string) error {
-  return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
 }
 
 func GetPasswordByEmail(email string) (password string, err error) {
