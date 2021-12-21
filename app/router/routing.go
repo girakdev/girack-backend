@@ -1,11 +1,13 @@
 package router
 
 import (
-  "github.com/gin-gonic/gin"
-  "github.com/gin-contrib/sessions"
-  "github.com/gin-contrib/sessions/cookie"
+	"net/http"
 
-  "app/controller"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
+
+	"app/controller"
 )
 
 func CreateRouter() *gin.Engine {
@@ -18,16 +20,15 @@ func CreateRouter() *gin.Engine {
   {
     v1 := girackRouter.Group("/v1")
     {
-      v1.POST("/register", controller.Register)
+      v1.POST("/register", controller.CreateUser)
       v1.POST("/login", controller.Login)
-      v1.POST("/logout", controller.Logout)
+      v1.GET("/logout", controller.Logout)
 
-      authUserGroup := v1.Group("auth")
-      authUserGroup.Use(sessionCheck())
+      authUserGroup := v1.Group("/auth")
+      authUserGroup.Use(AuthRequired)
       {
         users := authUserGroup.Group("/users")
         {
-          users.POST("", controller.CreateUser)
           users.PUT(":id", controller.UpdateUser)
           users.GET(":id", controller.GetUser)
           users.GET("", controller.GetAllUser)
@@ -49,7 +50,14 @@ func CreateRouter() *gin.Engine {
   return router
 }
 
-func sessionCheck() gin.HandlerFunc {
-  return func(c *gin.Context) {
+func AuthRequired(c *gin.Context) {
+  session := sessions.Default(c)
+  user := session.Get("user")
+  if user == nil {
+    c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+    return
   }
+
+  c.Next()
 }
+
