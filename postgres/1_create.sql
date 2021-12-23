@@ -14,7 +14,8 @@ CREATE TABLE channels (
   id SERIAL NOT NULL,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(255),
-  dm_flag boolean NOT NULL,
+  member INTEGER[] NOT NULL,
+  dm_flag BOOLEAN NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (id)
