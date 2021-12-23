@@ -5,4 +5,5 @@ type Channel struct {
   Name string `json:"name"`
   Description string `json:"discreption"`
   Dm_flag string `json:"dm_flag"`
+  Member []int `json:"member"`
 }
