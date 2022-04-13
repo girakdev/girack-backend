@@ -11,13 +11,17 @@ import (
 	"app/db"
   "app/entity"
 )
+const (
+  registerQuery = "INSERT INTO users (email, name, password) VALUES($1, $2, $3)"
+  getUserByEmailQuery = "SELECT id, email, password, name FROM users WHERE email = $1"
+)
 
 func Register(c *gin.Context) {
   db := db.Db
   user := entity.User{}
   c.BindJSON(&user)
 
-  stmt, err := db.Prepare("INSERT INTO users (email, name, password) VALUES($1, $2, $3)")
+  stmt, err := db.Prepare(registerQuery)
   if err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": ""})
     return
@@ -44,6 +48,7 @@ func Login(c *gin.Context) {
   c.BindJSON(&user)
 
   dbuser, err := GetUserByEmail(user.Email)
+
   if err == sql.ErrNoRows {
     c.JSON(http.StatusUnauthorized, gin.H{"error1": "incorrect Email or Password"})
     return
@@ -94,7 +99,7 @@ func passwordHash(pw string) (string, error) {
 func GetUserByEmail(email string) (user entity.User, err error) {
   db := db.Db
 
-  stmt, err := db.Prepare("SELECT id, email, password, name FROM users WHERE email = $1")
+  stmt, err := db.Prepare(getUserByEmailQuery)
   if err != nil {
     return
   }

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   girack-server:
-    container_name: grack-server
+    container_name: girack-server
     build: 
       context: .
       dockerfile: ./docker/app/Dockerfile
