@@ -14,8 +14,10 @@ type channelRepository struct {
 
 var _ repository.ChannelRepository = (*channelRepository)(nil)
 
-func NewChannelRepository() *channelRepository {
-	return &channelRepository{}
+func NewChannelRepository(client *ent.Client) *channelRepository {
+	return &channelRepository{
+		client: client,
+	}
 }
 
 func (r channelRepository) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
