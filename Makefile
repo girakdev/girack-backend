@@ -13,3 +13,6 @@ db:
 migration:
 	go generate ./ent
 	docker compose exec -it girack go run ./cmd/migration/main.go
+
+mock-gen:
+	go generate ./...
