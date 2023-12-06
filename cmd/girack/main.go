@@ -6,6 +6,5 @@ import (
 )
 
 func main() {
-	router := controller.Router()
-	router.Run()
+	controller.Router().Run()
 }
