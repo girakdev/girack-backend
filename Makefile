@@ -16,3 +16,6 @@ migration:
 
 mock-gen:
 	go generate ./...
+
+swagger-gen:
+	swag init --dir ./cmd/girack -o ./docs/
