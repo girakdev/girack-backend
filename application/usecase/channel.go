@@ -1,3 +1,4 @@
+//go:generate mockgen -source=channel.go -destination=./mock/channel_mock.go -package=mock
 package usecase
 
 import (
