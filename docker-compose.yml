@@ -16,14 +16,15 @@ services:
 
   db:
     container_name: db 
-    build: 
-      dockerfile: ./docker/mysql/DockerFile
-    ports:
-      - "3306:3306"
+    image: postgres:latest
     env_file:
       - ./env.local
-
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --skip-character-set-client-handshake
+    ports: 
+      - "5432:5432"
     volumes:
-      - "./docker/mysql/my.conf:/etc/mysql/my.conf"
-      - "./docker/mysql/init/:/docker-entrypoint-initdb.d"
+      - ./database/init:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+    driver: local
