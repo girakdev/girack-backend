@@ -17,7 +17,7 @@ func (Channel) Fields() []ent.Field {
 		field.String("id").
 			GoType(pulid.ID("")).
 			DefaultFunc(func() pulid.ID { return pulid.MustNew("US") }),
-		field.Int("name"),
+		field.String("name"),
 	}
 }
 

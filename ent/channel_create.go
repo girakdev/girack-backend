@@ -21,8 +21,8 @@ type ChannelCreate struct {
 }
 
 // SetName sets the "name" field.
-func (cc *ChannelCreate) SetName(i int) *ChannelCreate {
-	cc.mutation.SetName(i)
+func (cc *ChannelCreate) SetName(s string) *ChannelCreate {
+	cc.mutation.SetName(s)
 	return cc
 }
 
@@ -122,7 +122,7 @@ func (cc *ChannelCreate) createSpec() (*Channel, *sqlgraph.CreateSpec) {
 		_spec.ID.Value = &id
 	}
 	if value, ok := cc.mutation.Name(); ok {
-		_spec.SetField(channel.FieldName, field.TypeInt, value)
+		_spec.SetField(channel.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	return _node, _spec

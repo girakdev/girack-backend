@@ -18,7 +18,7 @@ type Channel struct {
 	// ID of the ent.
 	ID pulid.ID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
-	Name         int `json:"name,omitempty"`
+	Name         string `json:"name,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -30,7 +30,7 @@ func (*Channel) scanValues(columns []string) ([]any, error) {
 		case channel.FieldID:
 			values[i] = new(pulid.ID)
 		case channel.FieldName:
-			values[i] = new(sql.NullInt64)
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -53,10 +53,10 @@ func (c *Channel) assignValues(columns []string, values []any) error {
 				c.ID = *value
 			}
 		case channel.FieldName:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				c.Name = int(value.Int64)
+				c.Name = value.String
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -95,7 +95,7 @@ func (c *Channel) String() string {
 	builder.WriteString("Channel(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
 	builder.WriteString("name=")
-	builder.WriteString(fmt.Sprintf("%v", c.Name))
+	builder.WriteString(c.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

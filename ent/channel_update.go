@@ -28,23 +28,16 @@ func (cu *ChannelUpdate) Where(ps ...predicate.Channel) *ChannelUpdate {
 }
 
 // SetName sets the "name" field.
-func (cu *ChannelUpdate) SetName(i int) *ChannelUpdate {
-	cu.mutation.ResetName()
-	cu.mutation.SetName(i)
+func (cu *ChannelUpdate) SetName(s string) *ChannelUpdate {
+	cu.mutation.SetName(s)
 	return cu
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (cu *ChannelUpdate) SetNillableName(i *int) *ChannelUpdate {
-	if i != nil {
-		cu.SetName(*i)
+func (cu *ChannelUpdate) SetNillableName(s *string) *ChannelUpdate {
+	if s != nil {
+		cu.SetName(*s)
 	}
-	return cu
-}
-
-// AddName adds i to the "name" field.
-func (cu *ChannelUpdate) AddName(i int) *ChannelUpdate {
-	cu.mutation.AddName(i)
 	return cu
 }
 
@@ -90,10 +83,7 @@ func (cu *ChannelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := cu.mutation.Name(); ok {
-		_spec.SetField(channel.FieldName, field.TypeInt, value)
-	}
-	if value, ok := cu.mutation.AddedName(); ok {
-		_spec.AddField(channel.FieldName, field.TypeInt, value)
+		_spec.SetField(channel.FieldName, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -116,23 +106,16 @@ type ChannelUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (cuo *ChannelUpdateOne) SetName(i int) *ChannelUpdateOne {
-	cuo.mutation.ResetName()
-	cuo.mutation.SetName(i)
+func (cuo *ChannelUpdateOne) SetName(s string) *ChannelUpdateOne {
+	cuo.mutation.SetName(s)
 	return cuo
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (cuo *ChannelUpdateOne) SetNillableName(i *int) *ChannelUpdateOne {
-	if i != nil {
-		cuo.SetName(*i)
+func (cuo *ChannelUpdateOne) SetNillableName(s *string) *ChannelUpdateOne {
+	if s != nil {
+		cuo.SetName(*s)
 	}
-	return cuo
-}
-
-// AddName adds i to the "name" field.
-func (cuo *ChannelUpdateOne) AddName(i int) *ChannelUpdateOne {
-	cuo.mutation.AddName(i)
 	return cuo
 }
 
@@ -208,10 +191,7 @@ func (cuo *ChannelUpdateOne) sqlSave(ctx context.Context) (_node *Channel, err e
 		}
 	}
 	if value, ok := cuo.mutation.Name(); ok {
-		_spec.SetField(channel.FieldName, field.TypeInt, value)
-	}
-	if value, ok := cuo.mutation.AddedName(); ok {
-		_spec.AddField(channel.FieldName, field.TypeInt, value)
+		_spec.SetField(channel.FieldName, field.TypeString, value)
 	}
 	_node = &Channel{config: cuo.config}
 	_spec.Assign = _node.assignValues

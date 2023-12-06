@@ -262,7 +262,7 @@ func (cq *ChannelQuery) Clone() *ChannelQuery {
 // Example:
 //
 //	var v []struct {
-//		Name int `json:"name,omitempty"`
+//		Name string `json:"name,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -285,7 +285,7 @@ func (cq *ChannelQuery) GroupBy(field string, fields ...string) *ChannelGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Name int `json:"name,omitempty"`
+//		Name string `json:"name,omitempty"`
 //	}
 //
 //	client.Channel.Query().
