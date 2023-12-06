@@ -18,6 +18,6 @@ type (
 	GetChannelsInput struct {
 	}
 	GetChannelsOutput struct {
-		Channels []model.Channel
+		Channels []*model.Channel
 	}
 )
