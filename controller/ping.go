@@ -7,8 +7,6 @@ import (
 	_ "github.com/girakdev/girack-backend/docs"
 )
 
-// @BasePath /v1
-
 // PingExample godoc
 // @Summary ping
 // @Schemes
@@ -16,7 +14,7 @@ import (
 // @Tags example
 // @Accept json
 // @Produce json
-// @Success 200 {string} OK
+// @Success 200 {string} ok
 // @Router /ping [get]
 func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, "ok")
