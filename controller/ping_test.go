@@ -17,5 +17,5 @@ func TestPingRoute(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, "ok", w.Body.String())
+	assert.Equal(t, "\"ok\"", w.Body.String())
 }
