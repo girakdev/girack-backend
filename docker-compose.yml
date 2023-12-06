@@ -1,0 +1,29 @@
+version: '3'
+services:
+  girack:
+    container_name: girack
+    build:
+      dockerfile: ./docker/go/DockerFile
+    expose:
+      - "8080"
+    ports: 
+      - 8080:8080
+    env_file:
+      - ./env.local
+    tty: true
+    volumes:
+      - .:/app
+
+  db:
+    container_name: db 
+    build: 
+      dockerfile: ./docker/mysql/DockerFile
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./env.local
+
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --skip-character-set-client-handshake
+    volumes:
+      - "./docker/mysql/my.conf:/etc/mysql/my.conf"
+      - "./docker/mysql/init/:/docker-entrypoint-initdb.d"
