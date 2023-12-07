@@ -59,7 +59,7 @@ func (c *channelController) ListChannel(g *gin.Context) {
 // @Tags			channels
 // @Accept			json
 // @Produce		json
-// @Param body body string true "body"
+// @Param name body string true "チャンネル名"
 // @Success		200	{object}	model.Channel
 // @Router			/channels [post]
 func (c *channelController) CreateChannel(g *gin.Context) {

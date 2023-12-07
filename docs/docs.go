@@ -54,8 +54,8 @@ const docTemplate = `{
                 "summary": "List Channel",
                 "parameters": [
                     {
-                        "description": "body",
-                        "name": "body",
+                        "description": "チャンネル名",
+                        "name": "name",
                         "in": "body",
                         "required": true,
                         "schema": {

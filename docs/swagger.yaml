@@ -31,9 +31,9 @@ paths:
       - application/json
       description: Get List Channel
       parameters:
-      - description: body
+      - description: チャンネル名
         in: body
-        name: body
+        name: name
         required: true
         schema:
           type: string
