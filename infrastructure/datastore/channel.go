@@ -20,19 +20,19 @@ func NewChannelRepository(client *ent.Client) *channelRepository {
 	}
 }
 
-func (r channelRepository) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
+func (r *channelRepository) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
 	channels, err := r.client.Channel.Query().All(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]*model.Channel, len(channels))
+	var res []*model.Channel
+	res = make([]*model.Channel, 0)
 	for _, v := range channels {
-		var c *model.Channel
-		c.ID = v.ID
-		c.Name = v.Name
-
-		res = append(res, c)
+		res = append(res, &model.Channel{
+			ID:   v.ID,
+			Name: v.Name,
+		})
 	}
 
 	return &repository.GetChannelsOutput{

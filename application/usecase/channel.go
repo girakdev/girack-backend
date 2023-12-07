@@ -12,8 +12,6 @@ type channelUsecase struct {
 	channelRepository repository.ChannelRepository
 }
 
-var _ ChannelLister = (*channelUsecase)(nil)
-
 func NewChannnelUsecase(
 	channelRepository repository.ChannelRepository,
 ) *channelUsecase {
@@ -24,7 +22,11 @@ func NewChannnelUsecase(
 
 type ChannelUsecase interface {
 	ChannelLister
+	ChannelCreator
 }
+
+var _ ChannelLister = (*channelUsecase)(nil)
+var _ ChannelCreator = (*channelUsecase)(nil)
 
 type (
 	ChannelLister interface {
@@ -33,10 +35,33 @@ type (
 	GetChannelListInput struct {
 	}
 	GetChannelListOut struct {
-		Channels []model.Channel
+		Channels []*model.Channel
+	}
+)
+
+type (
+	ChannelCreator interface {
+		CreateChannel(ctx context.Context, input *CreateChannelInput) (output *CreateChannelOutput, err error)
+	}
+	CreateChannelInput struct {
+		Name string
+	}
+	CreateChannelOutput struct {
+		Channel *model.Channel
 	}
 )
 
 func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOut, err error) {
-	return &GetChannelListOut{}, nil
+	gcOutm, err := u.channelRepository.GetChannels(ctx, &repository.GetChannelsInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetChannelListOut{
+		Channels: gcOutm.Channels,
+	}, nil
+}
+
+func (u *channelUsecase) CreateChannel(ctx context.Context, input *CreateChannelInput) (output *CreateChannelOutput, err error) {
+	return &CreateChannelOutput{}, nil
 }

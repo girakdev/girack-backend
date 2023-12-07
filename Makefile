@@ -18,4 +18,4 @@ mock-gen:
 	go generate ./...
 
 swag-gen:
-	swag init --dir ./cmd/girack,./controller -o ./docs/
+	swag init --dir ./cmd/girack,./controller,./application/model -o ./docs/
