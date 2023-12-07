@@ -15,7 +15,6 @@ import (
 // @license.name	isataku, whale-yay, kirota
 // @description	Girack webapi reference
 func Router(client *ent.Client) *gin.Engine {
-
 	// Repository
 	channelRepository := datastore.NewChannelRepository(client)
 

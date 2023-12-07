@@ -63,16 +63,11 @@ func (c *channelController) ListChannel(g *gin.Context) {
 // @Success		200	{object}	model.Channel
 // @Router			/channels [post]
 func (c *channelController) CreateChannel(g *gin.Context) {
-	type payload struct {
-		Name string `json:"name"`
-	}
-
-	p := &payload{}
+	p := &model.PostChannelPayload{}
 	if err := g.BindJSON(p); err != nil {
 		g.JSON(http.StatusInternalServerError, `parse error`)
 		return
 	}
-	log.Println(p.Name)
 	ccOut, err := c.channnelUsecase.CreateChannel(g, &usecase.CreateChannelInput{
 		Name: p.Name,
 	})

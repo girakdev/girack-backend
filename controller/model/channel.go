@@ -6,3 +6,7 @@ type Channel struct {
 }
 
 type Channels []*Channel
+
+type PostChannelPayload struct {
+	Name string `json:"name"`
+}
