@@ -6,6 +6,7 @@ import (
 
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/domain/repository"
+	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type channelUsecase struct {
@@ -63,5 +64,14 @@ func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelLi
 }
 
 func (u *channelUsecase) CreateChannel(ctx context.Context, input *CreateChannelInput) (output *CreateChannelOutput, err error) {
-	return &CreateChannelOutput{}, nil
+	ccOut, err := u.channelRepository.CreateChannel(ctx, &repository.CreateChannelInput{
+		ID:   pulid.MustNew(model.ULIDChannelPrefix),
+		Name: input.Name,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &CreateChannelOutput{
+		Channel: ccOut.Channel,
+	}, nil
 }

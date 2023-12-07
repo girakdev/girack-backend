@@ -5,10 +5,12 @@ import (
 	"context"
 
 	"github.com/girakdev/girack-backend/application/model"
+	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type ChannelRepository interface {
 	ChannelsGetter
+	ChannelCreator
 }
 
 type (
@@ -19,5 +21,18 @@ type (
 	}
 	GetChannelsOutput struct {
 		Channels []*model.Channel
+	}
+)
+
+type (
+	ChannelCreator interface {
+		CreateChannel(ctx context.Context, input *CreateChannelInput) (output *CreateChannelOutput, err error)
+	}
+	CreateChannelInput struct {
+		ID   pulid.ID
+		Name string
+	}
+	CreateChannelOutput struct {
+		Channel *model.Channel
 	}
 )

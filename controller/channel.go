@@ -53,6 +53,36 @@ func (c *channelController) ListChannel(g *gin.Context) {
 	g.JSON(http.StatusOK, channels)
 }
 
+// @Summary	List Channel
+// @Schemes
+// @Description	Get List Channel
+// @Tags			channels
+// @Accept			json
+// @Produce		json
+// @Param body body string true "body"
+// @Success		200	{object}	model.Channel
+// @Router			/channels [post]
 func (c *channelController) CreateChannel(g *gin.Context) {
+	type payload struct {
+		Name string `json:"name"`
+	}
 
+	p := &payload{}
+	if err := g.BindJSON(p); err != nil {
+		g.JSON(http.StatusInternalServerError, `parse error`)
+		return
+	}
+	log.Println(p.Name)
+	ccOut, err := c.channnelUsecase.CreateChannel(g, &usecase.CreateChannelInput{
+		Name: p.Name,
+	})
+
+	if err != nil {
+		g.JSON(http.StatusInternalServerError, `usecase`)
+		return
+	}
+	g.JSON(http.StatusOK, model.Channel{
+		ID:   string(ccOut.Channel.ID),
+		Name: p.Name,
+	})
 }

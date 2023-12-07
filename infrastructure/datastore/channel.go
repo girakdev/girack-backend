@@ -39,3 +39,17 @@ func (r *channelRepository) GetChannels(ctx context.Context, input *repository.G
 		Channels: res,
 	}, nil
 }
+
+func (r *channelRepository) CreateChannel(ctx context.Context, input *repository.CreateChannelInput) (*repository.CreateChannelOutput, error) {
+	channel, err := r.client.Channel.Create().SetID(input.ID).SetName(input.Name).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &repository.CreateChannelOutput{
+		Channel: &model.Channel{
+			ID:   channel.ID,
+			Name: channel.Name,
+		},
+	}, nil
+}

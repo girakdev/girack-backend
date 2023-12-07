@@ -10,10 +10,10 @@ import (
 	ginswagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-//	@title			Giarck
-//	@version		1.0
-//	@license.name	isataku, whale-yay, kirota
-//	@description	Girack webapi reference
+// @title			Giarck
+// @version		1.0
+// @license.name	isataku, whale-yay, kirota
+// @description	Girack webapi reference
 func Router(client *ent.Client) *gin.Engine {
 
 	// Repository
@@ -29,6 +29,7 @@ func Router(client *ent.Client) *gin.Engine {
 
 	r.GET("/ping", ping)
 	r.GET("/channels", channelController.ListChannel)
+	r.POST("/channels", channelController.CreateChannel)
 
 	r.GET("/swagger/*any", ginswagger.WrapHandler(ginfiles.Handler))
 

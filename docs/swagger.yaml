@@ -26,6 +26,27 @@ paths:
       summary: List Channel
       tags:
       - channels
+    post:
+      consumes:
+      - application/json
+      description: Get List Channel
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.Channel'
+      summary: List Channel
+      tags:
+      - channels
   /ping:
     get:
       consumes:

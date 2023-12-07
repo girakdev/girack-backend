@@ -6,3 +6,5 @@ type Channel struct {
 	ID   pulid.ID
 	Name string
 }
+
+const ULIDChannelPrefix = "channel"
