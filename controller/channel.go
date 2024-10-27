@@ -31,7 +31,7 @@ func (c *channelController) ListChannel(g *gin.Context) {
 	gcOut, err := c.channnelUsecase.GetChannelList(g, &usecase.GetChannelListInput{})
 	if err != nil {
 		log.Println(err)
-		g.JSON(http.StatusInternalServerError, `uooo`)
+		g.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
