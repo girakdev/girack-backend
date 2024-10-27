@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/controller/model"
+	"github.com/girakdev/girack-backend/domain/model"
 )
 
 type channelController struct {
@@ -43,11 +43,6 @@ func (c *channelController) ListChannel(g *gin.Context) {
 			ID:   string(v.ID),
 			Name: v.Name,
 		})
-	}
-
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, `usecase does not work`)
-		return
 	}
 
 	g.JSON(http.StatusOK, channels)
