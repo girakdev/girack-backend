@@ -35,6 +35,36 @@ func (m *MockChannelUsecase) EXPECT() *MockChannelUsecaseMockRecorder {
 	return m.recorder
 }
 
+// CreateChannel mocks base method.
+func (m *MockChannelUsecase) CreateChannel(ctx context.Context, input *usecase.CreateChannelInput) (*usecase.CreateChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.CreateChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateChannel indicates an expected call of CreateChannel.
+func (mr *MockChannelUsecaseMockRecorder) CreateChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChannel", reflect.TypeOf((*MockChannelUsecase)(nil).CreateChannel), ctx, input)
+}
+
+// DeleteChannel mocks base method.
+func (m *MockChannelUsecase) DeleteChannel(ctx context.Context, input *usecase.DeleteChannelInput) (*usecase.DeleteChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.DeleteChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteChannel indicates an expected call of DeleteChannel.
+func (mr *MockChannelUsecaseMockRecorder) DeleteChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChannel", reflect.TypeOf((*MockChannelUsecase)(nil).DeleteChannel), ctx, input)
+}
+
 // GetChannelList mocks base method.
 func (m *MockChannelUsecase) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOut, error) {
 	m.ctrl.T.Helper()
@@ -86,4 +116,80 @@ func (m *MockChannelLister) GetChannelList(ctx context.Context, input *usecase.G
 func (mr *MockChannelListerMockRecorder) GetChannelList(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannelList", reflect.TypeOf((*MockChannelLister)(nil).GetChannelList), ctx, input)
+}
+
+// MockChannelCreator is a mock of ChannelCreator interface.
+type MockChannelCreator struct {
+	ctrl     *gomock.Controller
+	recorder *MockChannelCreatorMockRecorder
+}
+
+// MockChannelCreatorMockRecorder is the mock recorder for MockChannelCreator.
+type MockChannelCreatorMockRecorder struct {
+	mock *MockChannelCreator
+}
+
+// NewMockChannelCreator creates a new mock instance.
+func NewMockChannelCreator(ctrl *gomock.Controller) *MockChannelCreator {
+	mock := &MockChannelCreator{ctrl: ctrl}
+	mock.recorder = &MockChannelCreatorMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockChannelCreator) EXPECT() *MockChannelCreatorMockRecorder {
+	return m.recorder
+}
+
+// CreateChannel mocks base method.
+func (m *MockChannelCreator) CreateChannel(ctx context.Context, input *usecase.CreateChannelInput) (*usecase.CreateChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.CreateChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateChannel indicates an expected call of CreateChannel.
+func (mr *MockChannelCreatorMockRecorder) CreateChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateChannel", reflect.TypeOf((*MockChannelCreator)(nil).CreateChannel), ctx, input)
+}
+
+// MockChannelDeleter is a mock of ChannelDeleter interface.
+type MockChannelDeleter struct {
+	ctrl     *gomock.Controller
+	recorder *MockChannelDeleterMockRecorder
+}
+
+// MockChannelDeleterMockRecorder is the mock recorder for MockChannelDeleter.
+type MockChannelDeleterMockRecorder struct {
+	mock *MockChannelDeleter
+}
+
+// NewMockChannelDeleter creates a new mock instance.
+func NewMockChannelDeleter(ctrl *gomock.Controller) *MockChannelDeleter {
+	mock := &MockChannelDeleter{ctrl: ctrl}
+	mock.recorder = &MockChannelDeleterMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockChannelDeleter) EXPECT() *MockChannelDeleterMockRecorder {
+	return m.recorder
+}
+
+// DeleteChannel mocks base method.
+func (m *MockChannelDeleter) DeleteChannel(ctx context.Context, input *usecase.DeleteChannelInput) (*usecase.DeleteChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.DeleteChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteChannel indicates an expected call of DeleteChannel.
+func (mr *MockChannelDeleterMockRecorder) DeleteChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChannel", reflect.TypeOf((*MockChannelDeleter)(nil).DeleteChannel), ctx, input)
 }

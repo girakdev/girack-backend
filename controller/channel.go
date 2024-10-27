@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/domain/model"
+	"github.com/girakdev/girack-backend/controller/model"
 	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
@@ -49,9 +49,9 @@ func (c *channelController) ListChannel(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, channels)
 }
 
-// @Summary	List Channel
+// @Summary	Create Channel
 // @Schemes
-// @Description	Get List Channel
+// @Description	Create Channel
 // @Tags			channels
 // @Accept			json
 // @Produce		json
@@ -84,8 +84,10 @@ func (c *channelController) CreateChannel(ctx *gin.Context) {
 // @Tags			channels
 // @Accept			json
 // @Produce		json
-// @Success		200	{}
-// @Router			/channels [delete]
+// @Param			id path string true "チャンネルID"
+// @Success		204
+// @Failure		404
+// @Router			/channels/{id} [delete]
 func (c *channelController) DeleteChannel(ctx *gin.Context) {
 	id := ctx.Param("id")
 

@@ -29,7 +29,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Get List Channel
+      description: Create Channel
       parameters:
       - description: チャンネル名
         in: body
@@ -44,7 +44,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.Channel'
-      summary: List Channel
+      summary: Create Channel
+      tags:
+      - channels
+  /channels/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Channel
+      parameters:
+      - description: チャンネルID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+      summary: Delete Channel
       tags:
       - channels
   /ping:

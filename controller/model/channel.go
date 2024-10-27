@@ -1,5 +1,7 @@
 package model
 
+// Swaggoのコメントを記述するためのファイル
+
 type Channel struct {
 	ID   string `json:"ID"`
 	Name string `json:"name"`

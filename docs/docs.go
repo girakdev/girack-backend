@@ -41,7 +41,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Get List Channel",
+                "description": "Create Channel",
                 "consumes": [
                     "application/json"
                 ],
@@ -51,7 +51,7 @@ const docTemplate = `{
                 "tags": [
                     "channels"
                 ],
-                "summary": "List Channel",
+                "summary": "Create Channel",
                 "parameters": [
                     {
                         "description": "チャンネル名",
@@ -69,6 +69,38 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.Channel"
                         }
+                    }
+                }
+            }
+        },
+        "/channels/{id}": {
+            "delete": {
+                "description": "Delete Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "channels"
+                ],
+                "summary": "Delete Channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "チャンネルID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found"
                     }
                 }
             }
