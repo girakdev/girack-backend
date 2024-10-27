@@ -8,6 +8,7 @@ import (
 )
 
 // PingExample godoc
+//
 //	@Summary	ping
 //	@Schemes
 //	@Description	do ping
@@ -18,5 +19,4 @@ import (
 //	@Router			/ping [get]
 func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, "ok")
-
 }
