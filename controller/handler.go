@@ -29,6 +29,7 @@ func Router(client *ent.Client) *gin.Engine {
 	r.GET("/ping", ping)
 	r.GET("/channels", channelController.ListChannel)
 	r.POST("/channels", channelController.CreateChannel)
+	r.DELETE("/channels/:id", channelController.DeleteChannel)
 
 	r.GET("/swagger/*any", ginswagger.WrapHandler(ginfiles.Handler))
 

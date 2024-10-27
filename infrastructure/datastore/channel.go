@@ -53,3 +53,15 @@ func (r *channelRepository) CreateChannel(ctx context.Context, input *repository
 		},
 	}, nil
 }
+
+func (r *channelRepository) DeleteChannel(ctx context.Context, input *repository.DeleteChannelInput) (*repository.DeleteChannelOutput, error) {
+	err := r.client.Channel.DeleteOneID(input.ID).Exec(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, repository.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return &repository.DeleteChannelOutput{}, nil
+}

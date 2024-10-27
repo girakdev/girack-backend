@@ -11,6 +11,7 @@ import (
 type ChannelRepository interface {
 	ChannelsGetter
 	ChannelCreator
+	ChannelDeleter
 }
 
 type (
@@ -34,5 +35,16 @@ type (
 	}
 	CreateChannelOutput struct {
 		Channel *model.Channel
+	}
+)
+
+type (
+	ChannelDeleter interface {
+		DeleteChannel(ctx context.Context, input *DeleteChannelInput) (output *DeleteChannelOutput, err error)
+	}
+	DeleteChannelInput struct {
+		ID pulid.ID
+	}
+	DeleteChannelOutput struct {
 	}
 )

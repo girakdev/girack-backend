@@ -3,6 +3,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/domain/repository"
@@ -24,10 +25,12 @@ func NewChannnelUsecase(
 type ChannelUsecase interface {
 	ChannelLister
 	ChannelCreator
+	ChannelDeleter
 }
 
 var _ ChannelLister = (*channelUsecase)(nil)
 var _ ChannelCreator = (*channelUsecase)(nil)
+var _ ChannelDeleter = (*channelUsecase)(nil)
 
 type (
 	ChannelLister interface {
@@ -49,6 +52,17 @@ type (
 	}
 	CreateChannelOutput struct {
 		Channel *model.Channel
+	}
+)
+
+type (
+	ChannelDeleter interface {
+		DeleteChannel(ctx context.Context, input *DeleteChannelInput) (output *DeleteChannelOutput, err error)
+	}
+	DeleteChannelInput struct {
+		ID pulid.ID
+	}
+	DeleteChannelOutput struct {
 	}
 )
 
@@ -74,4 +88,17 @@ func (u *channelUsecase) CreateChannel(ctx context.Context, input *CreateChannel
 	return &CreateChannelOutput{
 		Channel: ccOut.Channel,
 	}, nil
+}
+
+func (u *channelUsecase) DeleteChannel(ctx context.Context, input *DeleteChannelInput) (output *DeleteChannelOutput, err error) {
+	_, err = u.channelRepository.DeleteChannel(ctx, &repository.DeleteChannelInput{
+		ID: input.ID,
+	})
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			return nil, ErrNotFound
+		}
+		return nil, err
+	}
+	return &DeleteChannelOutput{}, nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/girakdev/girack-backend/application/usecase"
 	"github.com/girakdev/girack-backend/domain/model"
+	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type channelController struct {
@@ -27,11 +28,11 @@ func NewChannelHandler(channelUsecase usecase.ChannelUsecase) *channelController
 // @Produce		json
 // @Success		200	{object}	[]model.Channel
 // @Router			/channels [get]
-func (c *channelController) ListChannel(g *gin.Context) {
-	gcOut, err := c.channnelUsecase.GetChannelList(g, &usecase.GetChannelListInput{})
+func (c *channelController) ListChannel(ctx *gin.Context) {
+	gcOut, err := c.channnelUsecase.GetChannelList(ctx, &usecase.GetChannelListInput{})
 	if err != nil {
 		log.Println(err)
-		g.JSON(http.StatusInternalServerError, err)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -45,7 +46,7 @@ func (c *channelController) ListChannel(g *gin.Context) {
 		})
 	}
 
-	g.JSON(http.StatusOK, channels)
+	ctx.JSON(http.StatusOK, channels)
 }
 
 // @Summary	List Channel
@@ -57,22 +58,49 @@ func (c *channelController) ListChannel(g *gin.Context) {
 // @Param name body string true "チャンネル名"
 // @Success		200	{object}	model.Channel
 // @Router			/channels [post]
-func (c *channelController) CreateChannel(g *gin.Context) {
+func (c *channelController) CreateChannel(ctx *gin.Context) {
 	p := &model.PostChannelPayload{}
-	if err := g.BindJSON(p); err != nil {
-		g.JSON(http.StatusInternalServerError, `parse error`)
+	if err := ctx.BindJSON(p); err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	ccOut, err := c.channnelUsecase.CreateChannel(g, &usecase.CreateChannelInput{
+	ccOut, err := c.channnelUsecase.CreateChannel(ctx, &usecase.CreateChannelInput{
 		Name: p.Name,
 	})
 
 	if err != nil {
-		g.JSON(http.StatusInternalServerError, `usecase`)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	g.JSON(http.StatusOK, model.Channel{
+	ctx.JSON(http.StatusOK, model.Channel{
 		ID:   string(ccOut.Channel.ID),
 		Name: p.Name,
 	})
+}
+
+// @Summary	Delete Channel
+// @Schemes
+// @Description	Delete Channel
+// @Tags			channels
+// @Accept			json
+// @Produce		json
+// @Success		200	{}
+// @Router			/channels [delete]
+func (c *channelController) DeleteChannel(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	_, err := c.channnelUsecase.DeleteChannel(ctx, &usecase.DeleteChannelInput{
+		ID: pulid.ID(id),
+	})
+
+	if err != nil {
+		if err == usecase.ErrNotFound {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.JSON(http.StatusNoContent, gin.H{"status": "ok"})
 }
