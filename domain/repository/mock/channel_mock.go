@@ -65,57 +65,110 @@ func (mr *MockChannelRepositoryMockRecorder) DeleteChannel(ctx, input interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChannel", reflect.TypeOf((*MockChannelRepository)(nil).DeleteChannel), ctx, input)
 }
 
-// GetChannels mocks base method.
-func (m *MockChannelRepository) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
+// GetChannel mocks base method.
+func (m *MockChannelRepository) GetChannel(ctx context.Context, input *repository.GetChannelInput) (*repository.GetChannelOutput, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetChannels", ctx, input)
-	ret0, _ := ret[0].(*repository.GetChannelsOutput)
+	ret := m.ctrl.Call(m, "GetChannel", ctx, input)
+	ret0, _ := ret[0].(*repository.GetChannelOutput)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetChannels indicates an expected call of GetChannels.
-func (mr *MockChannelRepositoryMockRecorder) GetChannels(ctx, input interface{}) *gomock.Call {
+// GetChannel indicates an expected call of GetChannel.
+func (mr *MockChannelRepositoryMockRecorder) GetChannel(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannels", reflect.TypeOf((*MockChannelRepository)(nil).GetChannels), ctx, input)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannel", reflect.TypeOf((*MockChannelRepository)(nil).GetChannel), ctx, input)
 }
 
-// MockChannelsGetter is a mock of ChannelsGetter interface.
-type MockChannelsGetter struct {
+// GetChannelList mocks base method.
+func (m *MockChannelRepository) GetChannelList(ctx context.Context, input *repository.GetChannelListInput) (*repository.GetChannelListOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChannelList", ctx, input)
+	ret0, _ := ret[0].(*repository.GetChannelListOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChannelList indicates an expected call of GetChannelList.
+func (mr *MockChannelRepositoryMockRecorder) GetChannelList(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannelList", reflect.TypeOf((*MockChannelRepository)(nil).GetChannelList), ctx, input)
+}
+
+// MockChannelGetter is a mock of ChannelGetter interface.
+type MockChannelGetter struct {
 	ctrl     *gomock.Controller
-	recorder *MockChannelsGetterMockRecorder
+	recorder *MockChannelGetterMockRecorder
 }
 
-// MockChannelsGetterMockRecorder is the mock recorder for MockChannelsGetter.
-type MockChannelsGetterMockRecorder struct {
-	mock *MockChannelsGetter
+// MockChannelGetterMockRecorder is the mock recorder for MockChannelGetter.
+type MockChannelGetterMockRecorder struct {
+	mock *MockChannelGetter
 }
 
-// NewMockChannelsGetter creates a new mock instance.
-func NewMockChannelsGetter(ctrl *gomock.Controller) *MockChannelsGetter {
-	mock := &MockChannelsGetter{ctrl: ctrl}
-	mock.recorder = &MockChannelsGetterMockRecorder{mock}
+// NewMockChannelGetter creates a new mock instance.
+func NewMockChannelGetter(ctrl *gomock.Controller) *MockChannelGetter {
+	mock := &MockChannelGetter{ctrl: ctrl}
+	mock.recorder = &MockChannelGetterMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockChannelsGetter) EXPECT() *MockChannelsGetterMockRecorder {
+func (m *MockChannelGetter) EXPECT() *MockChannelGetterMockRecorder {
 	return m.recorder
 }
 
-// GetChannels mocks base method.
-func (m *MockChannelsGetter) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
+// GetChannel mocks base method.
+func (m *MockChannelGetter) GetChannel(ctx context.Context, input *repository.GetChannelInput) (*repository.GetChannelOutput, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetChannels", ctx, input)
-	ret0, _ := ret[0].(*repository.GetChannelsOutput)
+	ret := m.ctrl.Call(m, "GetChannel", ctx, input)
+	ret0, _ := ret[0].(*repository.GetChannelOutput)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetChannels indicates an expected call of GetChannels.
-func (mr *MockChannelsGetterMockRecorder) GetChannels(ctx, input interface{}) *gomock.Call {
+// GetChannel indicates an expected call of GetChannel.
+func (mr *MockChannelGetterMockRecorder) GetChannel(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannels", reflect.TypeOf((*MockChannelsGetter)(nil).GetChannels), ctx, input)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannel", reflect.TypeOf((*MockChannelGetter)(nil).GetChannel), ctx, input)
+}
+
+// MockChannelListGetter is a mock of ChannelListGetter interface.
+type MockChannelListGetter struct {
+	ctrl     *gomock.Controller
+	recorder *MockChannelListGetterMockRecorder
+}
+
+// MockChannelListGetterMockRecorder is the mock recorder for MockChannelListGetter.
+type MockChannelListGetterMockRecorder struct {
+	mock *MockChannelListGetter
+}
+
+// NewMockChannelListGetter creates a new mock instance.
+func NewMockChannelListGetter(ctrl *gomock.Controller) *MockChannelListGetter {
+	mock := &MockChannelListGetter{ctrl: ctrl}
+	mock.recorder = &MockChannelListGetterMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockChannelListGetter) EXPECT() *MockChannelListGetterMockRecorder {
+	return m.recorder
+}
+
+// GetChannelList mocks base method.
+func (m *MockChannelListGetter) GetChannelList(ctx context.Context, input *repository.GetChannelListInput) (*repository.GetChannelListOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChannelList", ctx, input)
+	ret0, _ := ret[0].(*repository.GetChannelListOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChannelList indicates an expected call of GetChannelList.
+func (mr *MockChannelListGetterMockRecorder) GetChannelList(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannelList", reflect.TypeOf((*MockChannelListGetter)(nil).GetChannelList), ctx, input)
 }
 
 // MockChannelCreator is a mock of ChannelCreator interface.

@@ -65,6 +65,21 @@ func (mr *MockChannelUsecaseMockRecorder) DeleteChannel(ctx, input interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteChannel", reflect.TypeOf((*MockChannelUsecase)(nil).DeleteChannel), ctx, input)
 }
 
+// GetChannel mocks base method.
+func (m *MockChannelUsecase) GetChannel(ctx context.Context, input *usecase.GetChannelInput) (*usecase.GetChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.GetChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChannel indicates an expected call of GetChannel.
+func (mr *MockChannelUsecaseMockRecorder) GetChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannel", reflect.TypeOf((*MockChannelUsecase)(nil).GetChannel), ctx, input)
+}
+
 // GetChannelList mocks base method.
 func (m *MockChannelUsecase) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOut, error) {
 	m.ctrl.T.Helper()
@@ -78,6 +93,44 @@ func (m *MockChannelUsecase) GetChannelList(ctx context.Context, input *usecase.
 func (mr *MockChannelUsecaseMockRecorder) GetChannelList(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannelList", reflect.TypeOf((*MockChannelUsecase)(nil).GetChannelList), ctx, input)
+}
+
+// MockChannelGetter is a mock of ChannelGetter interface.
+type MockChannelGetter struct {
+	ctrl     *gomock.Controller
+	recorder *MockChannelGetterMockRecorder
+}
+
+// MockChannelGetterMockRecorder is the mock recorder for MockChannelGetter.
+type MockChannelGetterMockRecorder struct {
+	mock *MockChannelGetter
+}
+
+// NewMockChannelGetter creates a new mock instance.
+func NewMockChannelGetter(ctrl *gomock.Controller) *MockChannelGetter {
+	mock := &MockChannelGetter{ctrl: ctrl}
+	mock.recorder = &MockChannelGetterMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockChannelGetter) EXPECT() *MockChannelGetterMockRecorder {
+	return m.recorder
+}
+
+// GetChannel mocks base method.
+func (m *MockChannelGetter) GetChannel(ctx context.Context, input *usecase.GetChannelInput) (*usecase.GetChannelOutput, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetChannel", ctx, input)
+	ret0, _ := ret[0].(*usecase.GetChannelOutput)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetChannel indicates an expected call of GetChannel.
+func (mr *MockChannelGetterMockRecorder) GetChannel(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetChannel", reflect.TypeOf((*MockChannelGetter)(nil).GetChannel), ctx, input)
 }
 
 // MockChannelLister is a mock of ChannelLister interface.
