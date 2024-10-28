@@ -19,3 +19,6 @@ mock-gen:
 
 swag-gen:
 	swag init --dir ./cmd/girack,./controller,./application/model -o ./docs/
+
+test:
+	go test -v ./...
