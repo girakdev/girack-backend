@@ -81,10 +81,10 @@ func (mr *MockChannelUsecaseMockRecorder) GetChannel(ctx, input interface{}) *go
 }
 
 // GetChannelList mocks base method.
-func (m *MockChannelUsecase) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOut, error) {
+func (m *MockChannelUsecase) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOutput, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChannelList", ctx, input)
-	ret0, _ := ret[0].(*usecase.GetChannelListOut)
+	ret0, _ := ret[0].(*usecase.GetChannelListOutput)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -157,10 +157,10 @@ func (m *MockChannelLister) EXPECT() *MockChannelListerMockRecorder {
 }
 
 // GetChannelList mocks base method.
-func (m *MockChannelLister) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOut, error) {
+func (m *MockChannelLister) GetChannelList(ctx context.Context, input *usecase.GetChannelListInput) (*usecase.GetChannelListOutput, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetChannelList", ctx, input)
-	ret0, _ := ret[0].(*usecase.GetChannelListOut)
+	ret0, _ := ret[0].(*usecase.GetChannelListOutput)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

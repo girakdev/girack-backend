@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,24 +28,19 @@ func NewChannelHandler(channelUsecase usecase.ChannelUsecase) *channelController
 // @Success		200	{object}	model.Channel
 // @Router			/channels [get]
 func (c *channelController) GetChannel(ctx *gin.Context) {
-	gcOut, err := c.channnelUsecase.GetChannelList(ctx, &usecase.GetChannelListInput{})
+	gcOut, err := c.channnelUsecase.GetChannel(ctx, &usecase.GetChannelInput{
+		ID: pulid.ID(ctx.Param("id")),
+	})
 	if err != nil {
-		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	var channels []model.Channel
-	channels = make([]model.Channel, 0)
-
-	for _, v := range gcOut.Channels {
-		channels = append(channels, model.Channel{
-			ID:   string(v.ID),
-			Name: v.Name,
-		})
+	channel := model.Channel{
+		ID:   string(gcOut.Channel.ID),
+		Name: gcOut.Channel.Name,
 	}
-
-	ctx.JSON(http.StatusOK, channels)
+	ctx.JSON(http.StatusOK, channel)
 }
 
 // @Summary	List Channel
@@ -60,7 +54,6 @@ func (c *channelController) GetChannel(ctx *gin.Context) {
 func (c *channelController) ListChannel(ctx *gin.Context) {
 	gcOut, err := c.channnelUsecase.GetChannelList(ctx, &usecase.GetChannelListInput{})
 	if err != nil {
-		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -103,7 +96,7 @@ func (c *channelController) CreateChannel(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, model.Channel{
 		ID:   string(ccOut.Channel.ID),
-		Name: p.Name,
+		Name: ccOut.Channel.Name,
 	})
 }
 
@@ -126,7 +119,7 @@ func (c *channelController) DeleteChannel(ctx *gin.Context) {
 
 	if err != nil {
 		if err == usecase.ErrNotFound {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			ctx.JSON(http.StatusNotFound, err)
 			return
 		}
 		ctx.JSON(http.StatusInternalServerError, err)

@@ -48,11 +48,11 @@ type (
 
 type (
 	ChannelLister interface {
-		GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOut, err error)
+		GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOutput, err error)
 	}
 	GetChannelListInput struct {
 	}
-	GetChannelListOut struct {
+	GetChannelListOutput struct {
 		Channels []*model.Channel
 	}
 )
@@ -95,13 +95,13 @@ func (u *channelUsecase) GetChannel(ctx context.Context, input *GetChannelInput)
 	}, nil
 }
 
-func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOut, err error) {
+func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOutput, err error) {
 	gcOutm, err := u.channelRepository.GetChannelList(ctx, &repository.GetChannelListInput{})
 	if err != nil {
 		return nil, err
 	}
 
-	return &GetChannelListOut{
+	return &GetChannelListOutput{
 		Channels: gcOutm.Channels,
 	}, nil
 }
