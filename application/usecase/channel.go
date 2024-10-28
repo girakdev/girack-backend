@@ -108,7 +108,7 @@ func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelLi
 
 func (u *channelUsecase) CreateChannel(ctx context.Context, input *CreateChannelInput) (output *CreateChannelOutput, err error) {
 	ccOut, err := u.channelRepository.CreateChannel(ctx, &repository.CreateChannelInput{
-		ID:   pulid.MustNew(model.ULIDChannelPrefix),
+		ID:   newPULIDFunc(model.ULIDChannelPrefix),
 		Name: input.Name,
 	})
 	if err != nil {
