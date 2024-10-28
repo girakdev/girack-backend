@@ -27,6 +27,7 @@ func Router(client *ent.Client) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/ping", ping)
+	r.GET("/channels/:id", channelController.GetChannel)
 	r.GET("/channels", channelController.ListChannel)
 	r.POST("/channels", channelController.CreateChannel)
 	r.DELETE("/channels/:id", channelController.DeleteChannel)

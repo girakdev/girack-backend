@@ -26,11 +26,25 @@ type ChannelUsecase interface {
 	ChannelLister
 	ChannelCreator
 	ChannelDeleter
+	ChannelGetter
 }
 
+var _ ChannelGetter = (*channelUsecase)(nil)
 var _ ChannelLister = (*channelUsecase)(nil)
 var _ ChannelCreator = (*channelUsecase)(nil)
 var _ ChannelDeleter = (*channelUsecase)(nil)
+
+type (
+	ChannelGetter interface {
+		GetChannel(ctx context.Context, input *GetChannelInput) (output *GetChannelOutput, err error)
+	}
+	GetChannelInput struct {
+		ID pulid.ID
+	}
+	GetChannelOutput struct {
+		Channel *model.Channel
+	}
+)
 
 type (
 	ChannelLister interface {
@@ -66,8 +80,23 @@ type (
 	}
 )
 
+func (u *channelUsecase) GetChannel(ctx context.Context, input *GetChannelInput) (output *GetChannelOutput, err error) {
+	gcOut, err := u.channelRepository.GetChannel(ctx, &repository.GetChannelInput{
+		ID: input.ID,
+	})
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			return nil, ErrNotFound
+		}
+		return nil, err
+	}
+	return &GetChannelOutput{
+		Channel: gcOut.Channel,
+	}, nil
+}
+
 func (u *channelUsecase) GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOut, err error) {
-	gcOutm, err := u.channelRepository.GetChannels(ctx, &repository.GetChannelsInput{})
+	gcOutm, err := u.channelRepository.GetChannelList(ctx, &repository.GetChannelListInput{})
 	if err != nil {
 		return nil, err
 	}

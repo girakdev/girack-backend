@@ -20,7 +20,24 @@ func NewChannelRepository(client *ent.Client) *channelRepository {
 	}
 }
 
-func (r *channelRepository) GetChannels(ctx context.Context, input *repository.GetChannelsInput) (*repository.GetChannelsOutput, error) {
+func (r *channelRepository) GetChannel(ctx context.Context, input *repository.GetChannelInput) (*repository.GetChannelOutput, error) {
+	channel, err := r.client.Channel.Get(ctx, input.ID)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, repository.ErrNotFound
+		}
+		return nil, err
+	}
+
+	return &repository.GetChannelOutput{
+		Channel: &model.Channel{
+			ID:   channel.ID,
+			Name: channel.Name,
+		},
+	}, nil
+}
+
+func (r *channelRepository) GetChannelList(ctx context.Context, input *repository.GetChannelListInput) (*repository.GetChannelListOutput, error) {
 	channels, err := r.client.Channel.Query().All(ctx)
 	if err != nil {
 		return nil, err
@@ -35,7 +52,7 @@ func (r *channelRepository) GetChannels(ctx context.Context, input *repository.G
 		})
 	}
 
-	return &repository.GetChannelsOutput{
+	return &repository.GetChannelListOutput{
 		Channels: res,
 	}, nil
 }

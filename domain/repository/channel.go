@@ -9,18 +9,30 @@ import (
 )
 
 type ChannelRepository interface {
-	ChannelsGetter
+	ChannelGetter
+	ChannelListGetter
 	ChannelCreator
 	ChannelDeleter
 }
 
 type (
-	ChannelsGetter interface {
-		GetChannels(ctx context.Context, input *GetChannelsInput) (output *GetChannelsOutput, err error)
+	ChannelGetter interface {
+		GetChannel(ctx context.Context, input *GetChannelInput) (output *GetChannelOutput, err error)
 	}
-	GetChannelsInput struct {
+	GetChannelInput struct {
+		ID pulid.ID
 	}
-	GetChannelsOutput struct {
+	GetChannelOutput struct {
+		Channel *model.Channel
+	}
+)
+type (
+	ChannelListGetter interface {
+		GetChannelList(ctx context.Context, input *GetChannelListInput) (output *GetChannelListOutput, err error)
+	}
+	GetChannelListInput struct {
+	}
+	GetChannelListOutput struct {
 		Channels []*model.Channel
 	}
 )

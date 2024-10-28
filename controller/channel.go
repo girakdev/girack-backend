@@ -20,6 +20,35 @@ func NewChannelHandler(channelUsecase usecase.ChannelUsecase) *channelController
 	}
 }
 
+// @Summary	Get Channel
+// @Schemes
+// @Description	Get Channel
+// @Tags			channels
+// @Accept			json
+// @Produce		json
+// @Success		200	{object}	model.Channel
+// @Router			/channels [get]
+func (c *channelController) GetChannel(ctx *gin.Context) {
+	gcOut, err := c.channnelUsecase.GetChannelList(ctx, &usecase.GetChannelListInput{})
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	var channels []model.Channel
+	channels = make([]model.Channel, 0)
+
+	for _, v := range gcOut.Channels {
+		channels = append(channels, model.Channel{
+			ID:   string(v.ID),
+			Name: v.Name,
+		})
+	}
+
+	ctx.JSON(http.StatusOK, channels)
+}
+
 // @Summary	List Channel
 // @Schemes
 // @Description	Get List Channel
