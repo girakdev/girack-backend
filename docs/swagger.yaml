@@ -6,6 +6,13 @@ definitions:
       name:
         type: string
     type: object
+  github_com_girakdev_girack-backend_controller_model.User:
+    properties:
+      ID:
+        type: string
+      name:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -13,7 +20,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get List Channel
+      description: List Channel
       produces:
       - application/json
       responses:
@@ -83,4 +90,63 @@ paths:
       summary: ping
       tags:
       - example
+  /users:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+      summary: Delete User
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get List User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+            type: array
+      summary: List User
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+      summary: Create User
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+      summary: Update User
+      tags:
+      - users
 swagger: "2.0"

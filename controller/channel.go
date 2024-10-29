@@ -45,7 +45,7 @@ func (c *channelController) GetChannel(ctx *gin.Context) {
 
 // @Summary	List Channel
 // @Schemes
-// @Description	Get List Channel
+// @Description	List Channel
 // @Tags			channels
 // @Accept			json
 // @Produce		json
