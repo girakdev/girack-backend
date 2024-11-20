@@ -32,7 +32,7 @@ func Router(client *ent.Client) *gin.Engine {
 	r.POST("/channels", channelController.CreateChannel)
 	r.DELETE("/channels/:id", channelController.DeleteChannel)
 
-	r.GET("/swagger", ginswagger.WrapHandler(ginfiles.Handler))
+	r.GET("/swagger/*any", ginswagger.WrapHandler(ginfiles.Handler))
 
 	return r
 }

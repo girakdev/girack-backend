@@ -14,6 +14,8 @@ make dup
 make serve
 ```
 
+### Show swagger
+localhost:8080/swagger/index.html
 ### Test
 
 ```sh
