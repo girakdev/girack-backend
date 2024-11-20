@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/controller/model"
 	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
@@ -25,8 +25,9 @@ func NewChannelHandler(channelUsecase usecase.ChannelUsecase) *channelController
 // @Tags			channels
 // @Accept			json
 // @Produce		json
+// @Param			id path string true "チャンネルID"
 // @Success		200	{object}	model.Channel
-// @Router			/channels [get]
+// @Router			/channels/{id} [get]
 func (c *channelController) GetChannel(ctx *gin.Context) {
 	gcOut, err := c.channnelUsecase.GetChannel(ctx, &usecase.GetChannelInput{
 		ID: pulid.ID(ctx.Param("id")),
@@ -37,9 +38,9 @@ func (c *channelController) GetChannel(ctx *gin.Context) {
 	}
 
 	channel := model.Channel{
-		ID:   string(gcOut.Channel.ID),
 		Name: gcOut.Channel.Name,
 	}
+
 	ctx.JSON(http.StatusOK, channel)
 }
 
@@ -63,7 +64,7 @@ func (c *channelController) ListChannel(ctx *gin.Context) {
 
 	for _, v := range gcOut.Channels {
 		channels = append(channels, model.Channel{
-			ID:   string(v.ID),
+			ID:   v.ID,
 			Name: v.Name,
 		})
 	}
@@ -79,9 +80,14 @@ func (c *channelController) ListChannel(ctx *gin.Context) {
 // @Produce		json
 // @Param name body string true "チャンネル名"
 // @Success		200	{object}	model.Channel
+// @Failure		500
 // @Router			/channels [post]
 func (c *channelController) CreateChannel(ctx *gin.Context) {
-	p := &model.PostChannelPayload{}
+	type Payload struct {
+		Name string `json:"name"`
+	}
+
+	p := &Payload{}
 	if err := ctx.BindJSON(p); err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
@@ -95,7 +101,7 @@ func (c *channelController) CreateChannel(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, model.Channel{
-		ID:   string(ccOut.Channel.ID),
+		ID:   ccOut.Channel.ID,
 		Name: ccOut.Channel.Name,
 	})
 }
@@ -109,6 +115,7 @@ func (c *channelController) CreateChannel(ctx *gin.Context) {
 // @Param			id path string true "チャンネルID"
 // @Success		204
 // @Failure		404
+// @Failure		500
 // @Router			/channels/{id} [delete]
 func (c *channelController) DeleteChannel(ctx *gin.Context) {
 	id := ctx.Param("id")

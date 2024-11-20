@@ -222,7 +222,7 @@ const docTemplate = `{
         "github_com_girakdev_girack-backend_controller_model.Channel": {
             "type": "object",
             "properties": {
-                "ID": {
+                "id": {
                     "type": "string"
                 },
                 "name": {

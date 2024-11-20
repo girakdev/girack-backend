@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/controller/model"
 	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
@@ -37,7 +37,7 @@ func (c *UserController) GetUser(ctx *gin.Context) {
 	}
 
 	user := model.User{
-		ID:   string(guOut.User.ID),
+		ID:   guOut.User.ID,
 		Name: guOut.User.Name,
 	}
 
