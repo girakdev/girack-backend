@@ -5,14 +5,18 @@ import (
 	"context"
 
 	"github.com/girakdev/girack-backend/application/model"
+	"github.com/girakdev/girack-backend/domain/repository"
 	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type userUsecase struct {
+	userRepository repository.UserRepositry
 }
 
-func NewUserUsecase() *userUsecase {
-	return &userUsecase{}
+func NewUserUsecase(userRepository repository.UserRepositry) *userUsecase {
+	return &userUsecase{
+		userRepository: userRepository,
+	}
 }
 
 type UserUsecase interface {
@@ -87,21 +91,50 @@ type (
 )
 
 func (u *userUsecase) GetUser(ctx context.Context, input *GetUserInput) (output *GetUserOutput, err error) {
-	// TODO: Implement
-	return nil, nil
+	guOut, err := u.userRepository.GetUser(ctx, &repository.GetUserInput{
+		ID: input.ID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetUserOutput{
+		User: guOut.User,
+	}, nil
 }
 
 func (u *userUsecase) ListUser(ctx context.Context, input *ListUserInput) (output *ListUserOutput, err error) {
-	// TODO: Implement
-	return nil, nil
+	luOut, err := u.userRepository.ListUser(ctx, &repository.ListUserInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListUserOutput{
+		Users: luOut.Users,
+	}, nil
 }
 
 func (u *userUsecase) CreateUser(ctx context.Context, input *CreateUserInput) (output *CreateUserOutput, err error) {
-	// TODO: Implement
-	return nil, nil
+	cuOut, err := u.userRepository.CreateUser(ctx, &repository.CreateUserInput{
+		Name: input.Name,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &CreateUserOutput{
+		User: cuOut.User,
+	}, nil
 }
 
 func (u *userUsecase) DeleteUser(ctx context.Context, input *DeleteUserInput) (output *DeleteUserOutput, err error) {
-	// TODO: Implement
-	return nil, nil
+	_, err = u.userRepository.DeleteUser(ctx, &repository.DeleteUserInput{
+		ID: input.ID,
+	})
+	if err != nil {
+
+		return nil, err
+	}
+
+	return &DeleteUserOutput{}, nil
 }
