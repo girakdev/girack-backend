@@ -16,7 +16,7 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").
 			GoType(pulid.ID("")).
-			DefaultFunc(func() pulid.ID { return pulid.MustNew("US") }),
+			DefaultFunc(func() pulid.ID { return pulid.MustNew("User") }),
 		field.Int("age").Positive(),
 		field.String("name").Default("unknown"),
 	}
