@@ -14,7 +14,7 @@
 
 // Package pulid implements the pulid type.
 // A pulid is an identifier that is a two-byte prefixed ULIDs, with the first two bytes encoding the type of the entity.
-package pulid
+package model
 
 import (
 	"crypto/rand"

@@ -65,7 +65,7 @@ func (r *channelRepository) CreateChannel(ctx context.Context, input *repository
 
 	return &repository.CreateChannelOutput{
 		Channel: &model.Channel{
-			ID:   channel.ID,
+			ID:   model.ID(channel.ID),
 			Name: channel.Name,
 		},
 	}, nil

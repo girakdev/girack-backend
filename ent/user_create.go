@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/user"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -41,15 +41,15 @@ func (uc *UserCreate) SetNillableName(s *string) *UserCreate {
 }
 
 // SetID sets the "id" field.
-func (uc *UserCreate) SetID(pu pulid.ID) *UserCreate {
-	uc.mutation.SetID(pu)
+func (uc *UserCreate) SetID(m model.ID) *UserCreate {
+	uc.mutation.SetID(m)
 	return uc
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (uc *UserCreate) SetNillableID(pu *pulid.ID) *UserCreate {
-	if pu != nil {
-		uc.SetID(*pu)
+func (uc *UserCreate) SetNillableID(m *model.ID) *UserCreate {
+	if m != nil {
+		uc.SetID(*m)
 	}
 	return uc
 }
@@ -127,7 +127,7 @@ func (uc *UserCreate) sqlSave(ctx context.Context) (*User, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*pulid.ID); ok {
+		if id, ok := _spec.ID.Value.(*model.ID); ok {
 			_node.ID = *id
 		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
 			return nil, err

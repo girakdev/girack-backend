@@ -6,7 +6,6 @@ import (
 
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/domain/repository"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type userUsecase struct {
@@ -36,7 +35,7 @@ type (
 		GetUser(ctx context.Context, input *GetUserInput) (output *GetUserOutput, err error)
 	}
 	GetUserInput struct {
-		ID pulid.ID
+		ID model.ID
 	}
 	GetUserOutput struct {
 		User *model.User
@@ -72,7 +71,7 @@ type (
 		DeleteUser(ctx context.Context, input *DeleteUserInput) (output *DeleteUserOutput, err error)
 	}
 	DeleteUserInput struct {
-		ID pulid.ID
+		ID model.ID
 	}
 	DeleteUserOutput struct {
 	}

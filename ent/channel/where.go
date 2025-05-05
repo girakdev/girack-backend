@@ -4,52 +4,52 @@ package channel
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/predicate"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id pulid.ID) predicate.Channel {
+func ID(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id pulid.ID) predicate.Channel {
+func IDEQ(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id pulid.ID) predicate.Channel {
+func IDNEQ(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...pulid.ID) predicate.Channel {
+func IDIn(ids ...model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...pulid.ID) predicate.Channel {
+func IDNotIn(ids ...model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id pulid.ID) predicate.Channel {
+func IDGT(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id pulid.ID) predicate.Channel {
+func IDGTE(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id pulid.ID) predicate.Channel {
+func IDLT(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id pulid.ID) predicate.Channel {
+func IDLTE(id model.ID) predicate.Channel {
 	return predicate.Channel(sql.FieldLTE(FieldID, id))
 }
 

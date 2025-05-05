@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/channel"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // ChannelCreate is the builder for creating a Channel entity.
@@ -27,15 +27,15 @@ func (cc *ChannelCreate) SetName(s string) *ChannelCreate {
 }
 
 // SetID sets the "id" field.
-func (cc *ChannelCreate) SetID(pu pulid.ID) *ChannelCreate {
-	cc.mutation.SetID(pu)
+func (cc *ChannelCreate) SetID(m model.ID) *ChannelCreate {
+	cc.mutation.SetID(m)
 	return cc
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cc *ChannelCreate) SetNillableID(pu *pulid.ID) *ChannelCreate {
-	if pu != nil {
-		cc.SetID(*pu)
+func (cc *ChannelCreate) SetNillableID(m *model.ID) *ChannelCreate {
+	if m != nil {
+		cc.SetID(*m)
 	}
 	return cc
 }
@@ -101,7 +101,7 @@ func (cc *ChannelCreate) sqlSave(ctx context.Context) (*Channel, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*pulid.ID); ok {
+		if id, ok := _spec.ID.Value.(*model.ID); ok {
 			_node.ID = *id
 		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
 			return nil, err

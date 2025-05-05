@@ -1,8 +1,6 @@
 package usecase
 
-import (
-	"github.com/girakdev/girack-backend/internal/pulid"
-)
+import "github.com/girakdev/girack-backend/application/model"
 
 // for test
-var newPULIDFunc = pulid.MustNew
+var newIDFunc = model.MustNew

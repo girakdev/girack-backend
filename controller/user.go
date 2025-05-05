@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type UserController struct {
@@ -29,7 +28,7 @@ func NewUserHandler(userUsecase usecase.UserUsecase) *UserController {
 // @Router			/users [get]
 func (c *UserController) GetUser(ctx *gin.Context) {
 	guOut, err := c.userUsecase.GetUser(ctx, &usecase.GetUserInput{
-		ID: pulid.ID(ctx.Param("id")),
+		ID: model.ID(ctx.Param("id")),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)

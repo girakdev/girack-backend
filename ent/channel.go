@@ -8,15 +8,15 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/channel"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // Channel is the model entity for the Channel schema.
 type Channel struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID model.ID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name         string `json:"name,omitempty"`
 	selectValues sql.SelectValues
@@ -28,7 +28,7 @@ func (*Channel) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case channel.FieldID:
-			values[i] = new(pulid.ID)
+			values[i] = new(model.ID)
 		case channel.FieldName:
 			values[i] = new(sql.NullString)
 		default:
@@ -47,7 +47,7 @@ func (c *Channel) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case channel.FieldID:
-			if value, ok := values[i].(*pulid.ID); !ok {
+			if value, ok := values[i].(*model.ID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				c.ID = *value

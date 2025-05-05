@@ -3,10 +3,10 @@
 package ent
 
 import (
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/channel"
 	"github.com/girakdev/girack-backend/ent/schema"
 	"github.com/girakdev/girack-backend/ent/user"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -18,7 +18,7 @@ func init() {
 	// channelDescID is the schema descriptor for id field.
 	channelDescID := channelFields[0].Descriptor()
 	// channel.DefaultID holds the default value on creation for the id field.
-	channel.DefaultID = channelDescID.Default.(func() pulid.ID)
+	channel.DefaultID = channelDescID.Default.(func() model.ID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescAge is the schema descriptor for age field.
@@ -32,5 +32,5 @@ func init() {
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
-	user.DefaultID = userDescID.Default.(func() pulid.ID)
+	user.DefaultID = userDescID.Default.(func() model.ID)
 }

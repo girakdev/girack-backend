@@ -11,7 +11,6 @@ import (
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/application/usecase"
 	mockusecase "github.com/girakdev/girack-backend/application/usecase/mock"
-	"github.com/girakdev/girack-backend/internal/pulid"
 	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 )
@@ -23,7 +22,8 @@ func TestChannelController_GetChannel(t *testing.T) {
 		var (
 			id      = "1"
 			channel = model.Channel{
-				ID:   pulid.ID(id),
+				ID: model.ID(id),
+
 				Name: "channel",
 			}
 		)
@@ -59,11 +59,11 @@ func TestChannelController_ListChannel(t *testing.T) {
 		var (
 			channels = []*model.Channel{
 				{
-					ID:   pulid.ID("1"),
+					ID:   model.ID("1"),
 					Name: "channel1",
 				},
 				{
-					ID:   pulid.ID("2"),
+					ID:   model.ID("2"),
 					Name: "channel2",
 				},
 			}
@@ -109,7 +109,7 @@ func TestChannelController_CreateChannel(t *testing.T) {
 			id      = "1"
 			name    = "channel"
 			channel = model.Channel{
-				ID:   pulid.ID(id),
+				ID:   model.ID(id),
 				Name: name,
 			}
 		)
@@ -175,7 +175,7 @@ func TestChannelController_DeleteChannel(t *testing.T) {
 		channelUsecase.EXPECT().DeleteChannel(
 			gomock.Any(),
 			&usecase.DeleteChannelInput{
-				ID: pulid.ID(id),
+				ID: model.ID(id),
 			},
 		).Return(
 			nil,

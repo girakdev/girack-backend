@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/channel"
 	"github.com/girakdev/girack-backend/ent/predicate"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // ChannelQuery is the builder for querying Channel entities.
@@ -82,8 +82,8 @@ func (cq *ChannelQuery) FirstX(ctx context.Context) *Channel {
 
 // FirstID returns the first Channel ID from the query.
 // Returns a *NotFoundError when no Channel ID was found.
-func (cq *ChannelQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (cq *ChannelQuery) FirstID(ctx context.Context) (id model.ID, err error) {
+	var ids []model.ID
 	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -95,7 +95,7 @@ func (cq *ChannelQuery) FirstID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *ChannelQuery) FirstIDX(ctx context.Context) pulid.ID {
+func (cq *ChannelQuery) FirstIDX(ctx context.Context) model.ID {
 	id, err := cq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +133,8 @@ func (cq *ChannelQuery) OnlyX(ctx context.Context) *Channel {
 // OnlyID is like Only, but returns the only Channel ID in the query.
 // Returns a *NotSingularError when more than one Channel ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *ChannelQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
-	var ids []pulid.ID
+func (cq *ChannelQuery) OnlyID(ctx context.Context) (id model.ID, err error) {
+	var ids []model.ID
 	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -150,7 +150,7 @@ func (cq *ChannelQuery) OnlyID(ctx context.Context) (id pulid.ID, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *ChannelQuery) OnlyIDX(ctx context.Context) pulid.ID {
+func (cq *ChannelQuery) OnlyIDX(ctx context.Context) model.ID {
 	id, err := cq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +178,7 @@ func (cq *ChannelQuery) AllX(ctx context.Context) []*Channel {
 }
 
 // IDs executes the query and returns a list of Channel IDs.
-func (cq *ChannelQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
+func (cq *ChannelQuery) IDs(ctx context.Context) (ids []model.ID, err error) {
 	if cq.ctx.Unique == nil && cq.path != nil {
 		cq.Unique(true)
 	}
@@ -190,7 +190,7 @@ func (cq *ChannelQuery) IDs(ctx context.Context) (ids []pulid.ID, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *ChannelQuery) IDsX(ctx context.Context) []pulid.ID {
+func (cq *ChannelQuery) IDsX(ctx context.Context) []model.ID {
 	ids, err := cq.IDs(ctx)
 	if err != nil {
 		panic(err)

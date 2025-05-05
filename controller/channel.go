@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/application/usecase"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 type channelController struct {
@@ -30,7 +29,7 @@ func NewChannelHandler(channelUsecase usecase.ChannelUsecase) *channelController
 // @Router			/channels/{id} [get]
 func (c *channelController) GetChannel(ctx *gin.Context) {
 	gcOut, err := c.channnelUsecase.GetChannel(ctx, &usecase.GetChannelInput{
-		ID: pulid.ID(ctx.Param("id")),
+		ID: model.ID(ctx.Param("id")),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
@@ -121,7 +120,7 @@ func (c *channelController) DeleteChannel(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	_, err := c.channnelUsecase.DeleteChannel(ctx, &usecase.DeleteChannelInput{
-		ID: pulid.ID(id),
+		ID: model.ID(id),
 	})
 
 	if err != nil {

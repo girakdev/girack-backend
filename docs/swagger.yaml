@@ -1,14 +1,14 @@
 definitions:
-  github_com_girakdev_girack-backend_controller_model.Channel:
+  model.Channel:
     properties:
       id:
         type: string
       name:
         type: string
     type: object
-  github_com_girakdev_girack-backend_controller_model.User:
+  model.User:
     properties:
-      ID:
+      id:
         type: string
       name:
         type: string
@@ -28,7 +28,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.Channel'
+              $ref: '#/definitions/model.Channel'
             type: array
       summary: List Channel
       tags:
@@ -50,7 +50,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.Channel'
+            $ref: '#/definitions/model.Channel'
+        "500":
+          description: Internal Server Error
       summary: Create Channel
       tags:
       - channels
@@ -72,7 +74,29 @@ paths:
           description: No Content
         "404":
           description: Not Found
+        "500":
+          description: Internal Server Error
       summary: Delete Channel
+      tags:
+      - channels
+    get:
+      consumes:
+      - application/json
+      description: Get Channel
+      parameters:
+      - description: チャンネルID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Channel'
+      summary: Get Channel
       tags:
       - channels
   /ping:
@@ -101,7 +125,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+            $ref: '#/definitions/model.User'
       summary: Delete User
       tags:
       - users
@@ -116,7 +140,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+              $ref: '#/definitions/model.User'
             type: array
       summary: List User
       tags:
@@ -131,7 +155,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+            $ref: '#/definitions/model.User'
       summary: Create User
       tags:
       - users
@@ -145,7 +169,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_girakdev_girack-backend_controller_model.User'
+            $ref: '#/definitions/model.User'
       summary: Update User
       tags:
       - users

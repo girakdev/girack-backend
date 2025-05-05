@@ -3,7 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
-	"github.com/girakdev/girack-backend/internal/pulid"
+	"github.com/girakdev/girack-backend/application/model"
 )
 
 // User holds the schema definition for the User entity.
@@ -15,8 +15,8 @@ type User struct {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("id").
-			GoType(pulid.ID("")).
-			DefaultFunc(func() pulid.ID { return pulid.MustNew("User") }),
+			GoType(model.ID("")).
+			DefaultFunc(func() model.ID { return model.MustNew("User") }),
 		field.Int("age").Positive(),
 		field.String("name").Default("unknown"),
 	}

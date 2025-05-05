@@ -7,7 +7,6 @@ import (
 	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/domain/repository"
 	mockrepository "github.com/girakdev/girack-backend/domain/repository/mock"
-	"github.com/girakdev/girack-backend/internal/pulid"
 	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 )
@@ -115,14 +114,15 @@ func TestChannelUsecase_CreateChannel(t *testing.T) {
 	t.Parallel()
 
 	t.Run("OK", func(t *testing.T) {
-		newPULIDFunc = func(_ string) pulid.ID {
-			return "1"
-		}
 		ctx := context.Background()
 		ctrl := gomock.NewController(t)
 		channelRepository := mockrepository.NewMockChannelRepository(ctrl)
 
 		channelUsecase := NewChannnelUsecase(channelRepository)
+
+		newIDFunc = func(_ string) model.ID {
+			return "1"
+		}
 
 		channelRepository.EXPECT().CreateChannel(
 			gomock.Any(),

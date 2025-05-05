@@ -34,7 +34,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.Channel"
+                                "$ref": "#/definitions/model.Channel"
                             }
                         }
                     }
@@ -67,13 +67,46 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.Channel"
+                            "$ref": "#/definitions/model.Channel"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
         },
         "/channels/{id}": {
+            "get": {
+                "description": "Get Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "channels"
+                ],
+                "summary": "Get Channel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "チャンネルID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Channel"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete Channel",
                 "consumes": [
@@ -101,6 +134,9 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
@@ -147,7 +183,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.User"
+                                "$ref": "#/definitions/model.User"
                             }
                         }
                     }
@@ -169,7 +205,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.User"
+                            "$ref": "#/definitions/model.User"
                         }
                     }
                 }
@@ -190,7 +226,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.User"
+                            "$ref": "#/definitions/model.User"
                         }
                     }
                 }
@@ -211,7 +247,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_girakdev_girack-backend_controller_model.User"
+                            "$ref": "#/definitions/model.User"
                         }
                     }
                 }
@@ -219,7 +255,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_girakdev_girack-backend_controller_model.Channel": {
+        "model.Channel": {
             "type": "object",
             "properties": {
                 "id": {
@@ -230,10 +266,10 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_girakdev_girack-backend_controller_model.User": {
+        "model.User": {
             "type": "object",
             "properties": {
-                "ID": {
+                "id": {
                     "type": "string"
                 },
                 "name": {

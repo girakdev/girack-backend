@@ -8,15 +8,15 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/user"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 // User is the model entity for the User schema.
 type User struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID model.ID `json:"id,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -30,7 +30,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case user.FieldID:
-			values[i] = new(pulid.ID)
+			values[i] = new(model.ID)
 		case user.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName:
@@ -51,7 +51,7 @@ func (u *User) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case user.FieldID:
-			if value, ok := values[i].(*pulid.ID); !ok {
+			if value, ok := values[i].(*model.ID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				u.ID = *value

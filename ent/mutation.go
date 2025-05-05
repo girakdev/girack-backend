@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/girakdev/girack-backend/application/model"
 	"github.com/girakdev/girack-backend/ent/channel"
 	"github.com/girakdev/girack-backend/ent/predicate"
 	"github.com/girakdev/girack-backend/ent/user"
-	"github.com/girakdev/girack-backend/internal/pulid"
 )
 
 const (
@@ -34,7 +34,7 @@ type ChannelMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *pulid.ID
+	id            *model.ID
 	name          *string
 	clearedFields map[string]struct{}
 	done          bool
@@ -62,7 +62,7 @@ func newChannelMutation(c config, op Op, opts ...channelOption) *ChannelMutation
 }
 
 // withChannelID sets the ID field of the mutation.
-func withChannelID(id pulid.ID) channelOption {
+func withChannelID(id model.ID) channelOption {
 	return func(m *ChannelMutation) {
 		var (
 			err   error
@@ -114,13 +114,13 @@ func (m ChannelMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Channel entities.
-func (m *ChannelMutation) SetID(id pulid.ID) {
+func (m *ChannelMutation) SetID(id model.ID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ChannelMutation) ID() (id pulid.ID, exists bool) {
+func (m *ChannelMutation) ID() (id model.ID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -131,12 +131,12 @@ func (m *ChannelMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ChannelMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *ChannelMutation) IDs(ctx context.Context) ([]model.ID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []model.ID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -366,7 +366,7 @@ type UserMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *pulid.ID
+	id            *model.ID
 	age           *int
 	addage        *int
 	name          *string
@@ -396,7 +396,7 @@ func newUserMutation(c config, op Op, opts ...userOption) *UserMutation {
 }
 
 // withUserID sets the ID field of the mutation.
-func withUserID(id pulid.ID) userOption {
+func withUserID(id model.ID) userOption {
 	return func(m *UserMutation) {
 		var (
 			err   error
@@ -448,13 +448,13 @@ func (m UserMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of User entities.
-func (m *UserMutation) SetID(id pulid.ID) {
+func (m *UserMutation) SetID(id model.ID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *UserMutation) ID() (id pulid.ID, exists bool) {
+func (m *UserMutation) ID() (id model.ID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -465,12 +465,12 @@ func (m *UserMutation) ID() (id pulid.ID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *UserMutation) IDs(ctx context.Context) ([]pulid.ID, error) {
+func (m *UserMutation) IDs(ctx context.Context) ([]model.ID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []pulid.ID{id}, nil
+			return []model.ID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):

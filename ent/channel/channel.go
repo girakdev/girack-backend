@@ -4,7 +4,7 @@ package channel
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/girakdev/girack-backend/internal/pulid"
+	"github.com/girakdev/girack-backend/application/model"
 )
 
 const (
@@ -36,7 +36,7 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() model.ID
 )
 
 // OrderOption defines the ordering options for the Channel queries.

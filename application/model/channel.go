@@ -1,9 +1,7 @@
 package model
 
-import "github.com/girakdev/girack-backend/internal/pulid"
-
 type Channel struct {
-	ID   pulid.ID
+	ID   ID
 	Name string
 }
 

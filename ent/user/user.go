@@ -4,7 +4,7 @@ package user
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/girakdev/girack-backend/internal/pulid"
+	"github.com/girakdev/girack-backend/application/model"
 )
 
 const (
@@ -43,7 +43,7 @@ var (
 	// DefaultName holds the default value on creation for the "name" field.
 	DefaultName string
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() model.ID
 )
 
 // OrderOption defines the ordering options for the User queries.
