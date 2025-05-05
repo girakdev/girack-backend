@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -123,11 +124,11 @@ func (c *channelController) DeleteChannel(ctx *gin.Context) {
 		ID: model.ID(id),
 	})
 
+	if errors.Is(err, usecase.ErrNotFound) {
+		ctx.JSON(http.StatusNotFound, err)
+		return
+	}
 	if err != nil {
-		if err == usecase.ErrNotFound {
-			ctx.JSON(http.StatusNotFound, err)
-			return
-		}
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
